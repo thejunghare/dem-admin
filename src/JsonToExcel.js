@@ -124,7 +124,7 @@ const JsonToExcel = () => {
             <input type="file" accept=".json" id="fileUpload" onChange={handleFileUpload} />
             <label htmlFor="fileUpload">Choose JSON File</label>
         </div>
-        <button onClick={handleExport} className={'btn'}>Export to Excel</button>
+        <button onClick={handleExport}>Export to Excel</button>
     </div>
 
     );
