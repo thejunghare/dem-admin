@@ -20,9 +20,9 @@ const Header = ({ onComponentChange }) => {
   return (
     <nav className='nav-container'>
       <ul>
-        <li><a href="#" onClick={handleDashboardClick}>Dashboard</a></li>
-        <li><a href="#" onClick={handleDownloadClick}>Download</a></li>
-        <li><a href="#" onClick={handleConvertClick}>Convert</a></li>
+        <li><button onClick={handleDashboardClick}>Dashboard</button></li>
+        <li><button onClick={handleDownloadClick}>Download</button></li>
+        <li><button onClick={handleConvertClick}>Convert</button></li>
       </ul>
     </nav>
   )
