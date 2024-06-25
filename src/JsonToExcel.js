@@ -50,6 +50,7 @@ const JsonToExcel = () => {
                 isowner: item.isOwner,
                 roomOwnerMobileNumber: item.roomOwnerMobileNumber,
                 native: item.native,
+                createdAt:item.createdAt,
                 memberCount: item.memberCount,
                 familyHeadName: familyHead.familyHeadName,
                 familyHeadBirthdate: familyHead.familyHeadBirthdate,
@@ -74,6 +75,7 @@ const JsonToExcel = () => {
             const members = JSON.parse(item.members);
             members.forEach(member => {
                 data.push({
+                    createdAt:'',
                     division: '',  // Empty for member rows
                     ward: '',
                     type: '',
