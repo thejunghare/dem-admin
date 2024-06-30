@@ -1,6 +1,6 @@
 import React from "react";
 import { Databases, Client, Query } from "appwrite";
-import './index.css';
+import '../index.css';
 
 const appwrite = new Client();
 appwrite

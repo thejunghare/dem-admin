@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {databases, Query} from "./appwriteConfig";
-import "./index.css";
+import {databases, Query} from "../appwriteConfig";
+import "../index.css";
 
 function DocumentCount() {
     const databaseId = "66502c6e0015d7be8526";
