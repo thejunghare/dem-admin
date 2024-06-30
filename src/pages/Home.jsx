@@ -26,11 +26,11 @@ const Home = () => {
   return (
     <div>
       {user ? (
-        <>
+        <div className='welcome-container'>
           <h1>Welcome, {user.name}</h1>
           <p>Email: {user.email}</p>
           <button onClick={logout}>Logout</button>
-        </>
+        </div>
       ) : (
         <p>Loading...</p>
       )}

@@ -1,26 +1,90 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Header from './pages/Header';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Header from './pages/Header';
 import JsonToExcel from './pages/JsonToExcel';
 import DownloadCollection from './pages/DownloadCollection';
 import DocumentCount from './pages/DocumentCount';
+import { account } from './lib/appwrite';
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await account.get();
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Failed to authenticate:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const handleLogin = async (email, password) => {
+    try {
+      await account.createEmailPasswordSession(email, password);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Login failed:', error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await account.deleteSession('current');
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
-      <Header />
+      {isAuthenticated && <Header onLogout={handleLogout} />} {/* Pass onLogout handler to Header */}
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/json-to-excel" element={<JsonToExcel />} />
-        <Route path="/download-documents" element={<DownloadCollection />} />
-        <Route path="/count-emp-survey" element={<DocumentCount />} />
+        {/* Public Route: Login */}
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />}
+        />
+
+        {/* Private Routes */}
+        <Route
+          path="/"
+          element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/home"
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/json-to-excel"
+          element={isAuthenticated ? <JsonToExcel /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/download-documents"
+          element={isAuthenticated ? <DownloadCollection /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/count-emp-survey"
+          element={isAuthenticated ? <DocumentCount /> : <Navigate to="/login" />}
+        />
       </Routes>
     </Router>
   );
 };
 
 export default App;
-
