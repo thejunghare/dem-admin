@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "name": "kalyan",
+    "wards": [
+      {
+        "id": 1,
+        "name": 1,
+        "areas": [
+          {
+            "id": 1,
+            "name": "new work",
+            "buildings": [
+              {
+                "id": 1,
+                "name": "building One"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -2,12 +2,12 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
@@ -15,8 +15,8 @@ li {
   list-style: none;
 }
 
-Link{
-text-decoration: non;
+Link {
+  text-decoration: non;
 }
 
 .nav-container {
@@ -27,37 +27,37 @@ text-decoration: non;
   background-color: #f2f2f2;
 }
 
-.nav-container > ul {
+.nav-container>ul {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-evenly;
 }
 
-.nav-container > ul > li > a {
+.nav-container>ul>li>a {
   text-decoration: none;
   font-weight: bold;
   font-size: 16px;
 }
 
-.welcome-container{
+.welcome-container {
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   justify-content: center;
 }
 
-.login-form-container{
+.login-form-container {
   width: 80vw;
   height: 50vh;
   margin: auto;
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   justify-content: center;
 }
 
-.login-form-container > input {
+.login-form-container>input {
   margin: 5px;
   width: 25%;
   padding: 5px;
@@ -110,4 +110,38 @@ text-decoration: non;
   margin: auto;
   align-items: center;
   justify-content: space-between;
+}
+
+.selection-based-download {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  margin: auto;
+  height: 50vh;
+  /* border: 2px solid red; */
+}
+
+.selection-based-download>div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.select {
+  width: 25vw;
+  margin: 5px 2px;
+  padding: 5px;
+}
+
+.loading-text {
+  background-color: chartreuse;
+  padding: 4px;
+  margin: 5px;
+}
+
+.loading-text>p {
+  padding: 0px;
 }
