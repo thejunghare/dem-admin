@@ -193,6 +193,10 @@ const DownloadCollection = () => {
   const [loading, setLoading] = useState(false);
   const [downloadCount, setDownloadCount] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  const [selectedBuilding, setSelectedBuilding] = useState("");
+  const [buildings, setBuildings] = useState([]);
+
 
   const fetchData = async () => {
     const response = await fetch(
@@ -232,8 +236,13 @@ const DownloadCollection = () => {
   };
 
   const handleAreaChange = (e) => {
-    setSelectedArea(e.target.value);
+    const areaId = e.target.value;
+    setSelectedArea(areaId);
+    setBuildings([]);
+    const area = areas.find((a) => a.id === parseInt(areaId));
+    setBuildings(area ? area.buildings : []);
   };
+
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -248,6 +257,7 @@ const DownloadCollection = () => {
     if (selectedDivision) filters.division = selectedDivision;
     if (selectedWard) filters.ward = selectedWard;
     if (selectedArea) filters.area = selectedArea;
+    if (employeeId) filters.employeeId = employeeId;  // Add employeeId filter
 
     if (selectedDate) {
       const date = new Date(selectedDate);
@@ -314,14 +324,15 @@ const DownloadCollection = () => {
     } finally {
       setLoading(false);
     }
-  };
+};
+
 
 
 
   return (
     <div>
       <div className="selection-based-download">
-        {/* select division */}
+        {/* select division && select ward*/}
         <div>
           <select
             value={selectedDivision}
@@ -352,6 +363,7 @@ const DownloadCollection = () => {
           </select>
         </div>
 
+        {/* select area && select buildings */}
         <div>
           {/* select area */}
           <select
@@ -368,6 +380,31 @@ const DownloadCollection = () => {
             ))}
           </select>
 
+          <select
+            value={selectedBuilding}
+            onChange={(e) => setSelectedBuilding(e.target.value)}
+            disabled={!selectedArea}
+            className="select"
+          >
+            <option value="">Select Building</option>
+            {buildings.map((building) => (
+              <option key={building.id} value={building.name}>
+                {building.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* input date and employee */}
+        <div>
+          <input
+            type="text"
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
+            className="select"
+            placeholder='Enter employee ID'
+          />
+
           <input
             type="date"
             value={selectedDate}
@@ -376,6 +413,7 @@ const DownloadCollection = () => {
           />
         </div>
 
+        {/* download button */}
         <button
           onClick={handleDownloadBasedOnSelection}
           disabled={!selectedDivision || loading}
