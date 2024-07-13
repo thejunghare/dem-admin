@@ -326,9 +326,6 @@ const DownloadCollection = () => {
     }
 };
 
-
-
-
   return (
     <div>
       <div className="selection-based-download">

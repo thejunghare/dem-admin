@@ -32,27 +32,22 @@ const JsonToExcel = () => {
     }
 
     const data = [];
+    let serialNumber = 1; // Initialize serial number
 
     jsonData.forEach((item) => {
       const familyHead = JSON.parse(item.familyhead);
 
       // Add family head information
       data.push({
+        serialNumber: serialNumber++, // Add serial number
         division: item.division,
         ward: item.ward,
-        type: item.type,
         area: item.area,
         building: item.building,
-        roomNumber: item.roomNumber,
-        surveyDenied: item.surveyDenied,
-        isRoomLocked: item.isRoomLocked,
-        isRented: item.isRented,
-        isowner: item.isOwner,
-        roomOwnerMobileNumber: item.roomOwnerMobileNumber,
         native: item.native,
         createdAt: item.createdAt,
+        employeeId: item.employeeId,
         memberCount: item.memberCount,
-        surveyRemark: item.surveyRemark,
         familyHeadName: familyHead.familyHeadName,
         familyHeadBirthdate: familyHead.familyHeadBirthdate,
         familyHeadMobileNumber: familyHead.familyHeadMobileNumber,
@@ -61,36 +56,22 @@ const JsonToExcel = () => {
         voter: familyHead.voter,
         voterPoll: familyHead.voterPoll,
         voterPollArea: familyHead.voterPollArea,
-        familyHeadAge: familyHead.familyHeadAge,
-        memberName: "", // Empty for the family head row
-        memberBirthdate: "",
-        memberMobileNumber: "",
-        memberEducation: "",
-        memberAge: "",
-        memberVoter: "",
-        memberVoterPoll: "",
-        memberVoterPollArea: "",
+        surveyRemark: item.surveyRemark, // Keep surveyRemark here for now
       });
 
       // Add family members information
       const members = JSON.parse(item.members);
       members.forEach((member) => {
         data.push({
-          createdAt: "",
-          division: "", // Empty for member rows
+          serialNumber: "", // No serial number for member rows
+          division: "",
           ward: "",
-          type: "",
           area: "",
           building: "",
-          roomNumber: "",
-          surveyDenied: "",
-          isRoomLocked: "",
-          isRented: "",
-          isowner: "",
-          roomOwnerMobileNumber: "",
           native: "",
+          createdAt: "",
+          employeeId: "",
           memberCount: "",
-          surveyRemark: "",
           familyHeadName: "",
           familyHeadBirthdate: "",
           familyHeadMobileNumber: "",
@@ -99,7 +80,6 @@ const JsonToExcel = () => {
           voter: "",
           voterPoll: "",
           voterPollArea: "",
-          familyHeadAge: "",
           memberName: member.memberName,
           memberBirthdate: member.memberBirthdate,
           memberMobileNumber: member.memberMobileNumber,
@@ -108,13 +88,28 @@ const JsonToExcel = () => {
           memberVoter: member.voter,
           memberVoterPoll: member.voterPoll,
           memberVoterPollArea: member.voterPollArea,
+          surveyRemark: "", // No survey remark for member rows
         });
       });
     });
 
+    // Convert JSON data to worksheet
     const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // Manually reorder the columns to ensure surveyRemark is last
+    const finalData = data.map((item) => {
+      const { surveyRemark, ...rest } = item;
+      return { ...rest, surveyRemark };
+    });
+
+    // Create a new worksheet with the reordered data
+    const finalWorksheet = XLSX.utils.json_to_sheet(finalData);
+
+    // Append the final worksheet to the workbook
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.utils.book_append_sheet(workbook, finalWorksheet, "Sheet1");
+
+    // Write the workbook to a buffer and create a download link
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
@@ -123,6 +118,9 @@ const JsonToExcel = () => {
     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(blob, "data.xlsx");
   };
+
+
+
 
   return (
     <div className="container">
