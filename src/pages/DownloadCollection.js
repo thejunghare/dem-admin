@@ -4,8 +4,8 @@ import "../index.css";
 
 const appwrite = new Client();
 appwrite
-  .setEndpoint("https://cloud.appwrite.io/v1") // Set your Appwrite endpoint
-  .setProject("6648c699000032e4623c"); // Set your project ID
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject("6648c699000032e4623c");
 
 const database = new Databases(appwrite);
 
@@ -187,15 +187,15 @@ const DownloadCollection = () => {
   const [divisions, setDivisions] = useState([]);
   const [wards, setWards] = useState([]);
   const [areas, setAreas] = useState([]);
+  const [buildings, setBuildings] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedWard, setSelectedWard] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  const [selectedBuilding, setSelectedBuilding] = useState("");
   const [loading, setLoading] = useState(false);
   const [downloadCount, setDownloadCount] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
   const [employeeId, setEmployeeId] = useState("");
-  const [selectedBuilding, setSelectedBuilding] = useState("");
-  const [buildings, setBuildings] = useState([]);
 
 
   const fetchData = async () => {
@@ -236,12 +236,13 @@ const DownloadCollection = () => {
   };
 
   const handleAreaChange = (e) => {
-    const areaId = e.target.value;
-    setSelectedArea(areaId);
-    setBuildings([]);
-    const area = areas.find((a) => a.id === parseInt(areaId));
+    const areaName = e.target.value;
+    setSelectedArea(areaName);
+    setSelectedBuilding("");
+    const area = areas.find((a) => a.name === areaName);
     setBuildings(area ? area.buildings : []);
   };
+
 
 
   const formatDate = (date) => {
@@ -257,6 +258,7 @@ const DownloadCollection = () => {
     if (selectedDivision) filters.division = selectedDivision;
     if (selectedWard) filters.ward = selectedWard;
     if (selectedArea) filters.area = selectedArea;
+    if (selectedBuilding) filters.building = selectedBuilding; // Add building filter
     if (employeeId) filters.employeeId = employeeId;  // Add employeeId filter
 
     if (selectedDate) {
@@ -324,7 +326,8 @@ const DownloadCollection = () => {
     } finally {
       setLoading(false);
     }
-};
+  };
+
 
   return (
     <div>
@@ -390,6 +393,7 @@ const DownloadCollection = () => {
               </option>
             ))}
           </select>
+
         </div>
 
         {/* input date and employee */}
