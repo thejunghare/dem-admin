@@ -247,13 +247,13 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
-    const formatDate = (date) => {
+   /* const formatDate = (date) => {
         const d = new Date(date);
         const month = ("0" + (d.getMonth() + 1)).slice(-2);
         const day = ("0" + d.getDate()).slice(-2);
         const year = d.getFullYear();
         return `${year}-${month}-${day}`;
-    };
+    };*/
 
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
@@ -438,7 +438,7 @@ const DownloadCollection = () => {
                     </Button>
 
                     {loading && (
-                        <div className="loading-text">
+                        <div className="fs-6 fw-semibold">
                             downloading...
                             Downloaded {downloadCount} surveys
                         </div>

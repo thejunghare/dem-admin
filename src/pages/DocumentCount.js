@@ -352,7 +352,7 @@ function DocumentCount() {
                         value={fromDate}
                         onChange={handleFromDateChange}
                         placeholder="From Date"
-                        size={'sm'} size={'sm'}
+                        size={'sm'} 
                     />
                     <Form.Control
                         type="date"
