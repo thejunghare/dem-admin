@@ -96,7 +96,7 @@ const JsonToExcel = () => {
         });
 
         // Convert JSON data to worksheet
-        const worksheet = XLSX.utils.json_to_sheet(data);
+        //const worksheet = XLSX.utils.json_to_sheet(data);
 
         // Manually reorder the columns to ensure surveyRemark is last
         const finalData = data.map((item) => {
