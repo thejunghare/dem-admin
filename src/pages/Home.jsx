@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { account } from '../lib/appwrite';
+import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -29,7 +30,7 @@ const Home = () => {
         <div className='welcome-container'>
           <h1>Welcome, {user.name}</h1>
           <p>Email: {user.email}</p>
-          <button onClick={logout}>Logout</button>
+          <Button onClick={logout} variant="danger" size='sm'>Logout</Button>
         </div>
       ) : (
         <p>Loading...</p>

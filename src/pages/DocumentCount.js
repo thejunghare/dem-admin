@@ -1,6 +1,10 @@
 import React, {useState} from "react";
 import {databases, Query} from "../appwriteConfig";
-import "../index.css";
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function DocumentCount() {
     const databaseId = "66502c6e0015d7be8526";
@@ -321,94 +325,111 @@ function DocumentCount() {
 
 
     return (
-        <div>
-            <div className={'count_container'}>
-                <div>
+        <Container>
+            <Row className={''}>
+                <Col sm>
                     <h2>Total Count by Single Date</h2>
-                    <input
+                    <Form.Control
                         type="date"
                         value={createdAtTotal}
                         onChange={handleCreatedAtTotalChange}
+                        size={'sm'}
                     />
-                    <button onClick={fetchSingleDateTotalCount} className={'get_count_button'}>Get count</button>
-                    <button onClick={resetSingleDateTotalCount} className={'reset_count_button'}>Clear</button>
+                    <Button size={'sm'} variant={'primary'} onClick={fetchSingleDateTotalCount}
+                            className={'get_count_button'}>Get
+                        count</Button>
+                    <Button size={'sm'} variant={'secondary'} onClick={resetSingleDateTotalCount}
+                            className={'reset_count_button'}>Clear</Button>
                     <p>Total survey count: {singleDateTotalCount}</p>
                     <p>Total Fair survey Count: {singleDateFairTotalCount}</p>
                     <p>Total room locked count: {singleDateRoomLockedTotalCount}</p>
                     <p>Total denied survey: {singleDateSurveyDeniedTotalCount}</p>
-                </div>
-                <div>
+                </Col>
+                <Col sm>
                     <h2>Total Count by Date Range</h2>
-                    <input
+                    <Form.Control
                         type="date"
                         value={fromDate}
                         onChange={handleFromDateChange}
                         placeholder="From Date"
+                        size={'sm'} size={'sm'}
                     />
-                    <input
+                    <Form.Control
                         type="date"
                         value={toDate}
                         onChange={handleToDateChange}
                         placeholder="To Date"
+                        size={'sm'}
                     />
-                    <button onClick={fetchRangeTotalCount} className={'get_count_button'}>Get count</button>
-                    <button onClick={resetRangeTotalCount} className={'reset_count_button'}>Clear</button>
+                    <Button size={'sm'} variant={'primary'} onClick={fetchRangeTotalCount}
+                            className={'get_count_button'}>Get
+                        count</Button>
+                    <Button size={'sm'} variant={'secondary'} onClick={resetRangeTotalCount}
+                            className={'reset_count_button'}>Clear</Button>
                     <p>Total survey count: {rangeTotalCount}</p>
                     <p>Fair survey count: {rangeFairTotalCount}</p>
                     <p>Total room locked count: {rangeRoomLockedTotalCount}</p>
                     <p>Total Denied survey count: {rangeSurveyDeniedTotalCount}</p>
-                </div>
-            </div>
-            <div className={'count_container'}>
-                <div>
+                </Col>
+            </Row>
+            <Row>
+                <Col sm>
                     <h2>Count by Employee ID (Single Date)</h2>
-                    <input
+                    <Form.Control
                         type="text"
                         value={empId}
                         onChange={handleEmpIdChange}
                         placeholder="Enter Employee ID"
+                        size={'sm'}
                     />
-                    <input type="date" value={createdAt} onChange={handleCreatedAtChange}/>
-                    <button onClick={fetchEmpCount} className={'get_count_button'}>Get count</button>
-                    <button onClick={resetEmpCount} className={'reset_count_button'}>Clear</button>
+                    <Form.Control type="date" size={'sm'} value={createdAt} onChange={handleCreatedAtChange}/>
+                    <Button variant={'primary'} size={'sm'} onClick={fetchEmpCount} className={'get_count_button'}>Get
+                        count</Button>
+                    <Button size={'sm'} variant={'secondary'} onClick={resetEmpCount}
+                            className={'reset_count_button'}>Clear</Button>
                     <p>
                         Total survey count for {empId} on {createdAt}: {empCount}
                     </p>
                     <p>Total fair survey count: {fairDocumentCount}</p>
                     <p>Total room locked count: {roomLockedCount}</p>
                     <p>Total survey denied count: {surveyDeniedCount}</p>
-                </div>
-                <div>
+                </Col>
+                <Col sm>
                     <h2>Count by Employee ID (Date Range)</h2>
-                    <input
+                    <Form.Control
                         type="text"
                         value={empId}
                         onChange={handleEmpIdChange}
                         placeholder="Enter Employee ID"
+                        size={'sm'}
                     />
-                    <input
+                    <Form.Control
                         type="date"
                         value={empRangeFromDate}
                         onChange={handleEmpRangeFromDateChange}
                         placeholder="From Date"
+                        size={'sm'}
                     />
-                    <input
+                    <Form.Control
                         type="date"
                         value={empRangeToDate}
                         onChange={handleEmpRangeToDateChange}
                         placeholder="To Date"
+                        size={'sm'}
                     />
-                    <button onClick={fetchEmpRangeCount} className={'get_count_button'}>Get count</button>
-                    <button onClick={resetEmpRangeCount} className={'reset_count_button'}>Clear</button>
+                    <Button variant={'primary'} size={'sm'} onClick={fetchEmpRangeCount} className={'get_count_button'}>Get
+                        count</Button>
+                    <Button variant={'secondary'} size={'sm'} onClick={resetEmpRangeCount}
+                            className={'reset_count_button'}>Clear</Button>
                     <p>
                         Count for {empId} from {empRangeFromDate} to {empRangeToDate}: {empRangeCount}
                     </p>
                     <p>Fair survey count: {empRangeFairDocumentCount}</p>
                     <p>Total room locked Count: {empRangeRoomLockedCount}</p>
                     <p>Total survey denied count: {empRangeSurveyDeniedCount}</p>
-                </div>
-            </div>
-        </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

@@ -1,25 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import '../index.css'
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Header = () => {
   return (
-    <nav className="nav-container">
-      <ul>
-        <li>
-          <Link to="/home">Home</Link>
-        </li>
-        <li>
-          <Link to="/json-to-excel">JSON to Excel</Link>
-        </li>
-        <li>
-          <Link to="/download-documents">Download Survey</Link>
-        </li>
-        <li>
-          <Link to="/count-emp-survey">Count employee Survey</Link>
-        </li>
-      </ul>
-    </nav>
+    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="/home">Digital Election Management</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#features">Upload Voter</Nav.Link>
+            <Nav.Link href="/json-to-excel">Export Excel</Nav.Link>
+          </Nav>
+          <Nav>
+            <Nav.Link href="/download-documents">Export JSON</Nav.Link>
+            <Nav.Link eventKey={2} href="/count-emp-survey">
+              Dank memes
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
