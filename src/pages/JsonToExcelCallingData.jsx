@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const JsonToExcel = () => {
+const JsonToExcelCallingData = () => {
     const [jsonData, setJsonData] = useState([]);
 
     const handleFileUpload = (event) => {
@@ -34,7 +34,7 @@ const JsonToExcel = () => {
         }
 
         const data = [];
-        let serialNumber = 1;
+        let serialNumber = 1; 
 
         jsonData.forEach((item) => {
             const familyHead = JSON.parse(item.familyhead);
@@ -47,8 +47,6 @@ const JsonToExcel = () => {
                 Area: item.area,
                 Building: item.building,
                 'Room Number': item.roomNumber,
-                'Room Locked': item.isRoomLocked,
-                'Survey Deined': item.surveyDenied,
                 Native: item.native,
                 'Created At': item.createdAt,
                 'Employee Id': item.employeeId,
@@ -120,7 +118,7 @@ const JsonToExcel = () => {
         <Container>
             <Form>
                 <Form.Group className="mb-3" controlId="formGroupEmail">
-                    <Form.Label>JSON file to Report</Form.Label>
+                    <Form.Label>Export excel for calling</Form.Label>
                     <Form.Control
                         type="file"
                         accept=".json"
@@ -134,4 +132,4 @@ const JsonToExcel = () => {
     );
 };
 
-export default JsonToExcel;
+export default JsonToExcelCallingData;

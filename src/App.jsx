@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Header from './pages/Header';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import UploadVoter from './pages/UploadVoter';
 import JsonToExcel from './pages/JsonToExcel';
+import JsonToExcelCallingData from './pages/JsonToExcelCallingData';
 import DownloadCollection from './pages/DownloadCollection';
 import DocumentCount from './pages/DocumentCount';
 import { account } from './lib/appwrite';
@@ -71,8 +73,16 @@ const App = () => {
           element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
         />
         <Route
+          path="/upload-voter"
+          element={isAuthenticated ? <UploadVoter /> : <Navigate to="/login" />}
+        />
+        <Route
           path="/json-to-excel"
           element={isAuthenticated ? <JsonToExcel /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/calling-json-to-excel"
+          element={isAuthenticated ? <JsonToExcelCallingData /> : <Navigate to="/login" />}
         />
         <Route
           path="/download-documents"
