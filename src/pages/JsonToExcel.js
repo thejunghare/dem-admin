@@ -34,69 +34,61 @@ const JsonToExcel = () => {
         }
 
         const data = [];
-        let serialNumber = 1; // Initialize serial number
+        let serialNumber = 1; 
 
         jsonData.forEach((item) => {
             const familyHead = JSON.parse(item.familyhead);
 
             // Add family head information
             data.push({
-                serialNumber: serialNumber++, // Add serial number
-                division: item.division,
-                ward: item.ward,
-                area: item.area,
-                building: item.building,
-                native: item.native,
-                createdAt: item.createdAt,
-                employeeId: item.employeeId,
-                memberCount: item.memberCount,
-                familyHeadName: familyHead.familyHeadName,
-                familyHeadBirthdate: familyHead.familyHeadBirthdate,
-                familyHeadMobileNumber: familyHead.familyHeadMobileNumber,
-                familyHeadEducation: familyHead.familyHeadEducation,
-                caste: familyHead.caste,
-                voter: familyHead.voter,
-                voterPoll: familyHead.voterPoll,
-                voterPollArea: familyHead.voterPollArea,
-                surveyRemark: item.surveyRemark, // Keep surveyRemark here for now
+                'Serial Number': serialNumber++,
+                Division: item.division,
+                Ward: item.ward,
+                Area: item.area,
+                Building: item.building,
+                'Room Number': item.roomNumber,
+                Native: item.native,
+                'Created At': item.createdAt,
+                'Employee Id': item.employeeId,
+                'Member Count': item.memberCount,
+                'Name': familyHead.familyHeadName,
+                'Birthdate': familyHead.familyHeadBirthdate,
+                'Mobile Number': familyHead.familyHeadMobileNumber,
+                'Education': familyHead.familyHeadEducation,
+                'Caste': familyHead.caste,
+                'Age': familyHead.familyHeadAge,
+                Voter: familyHead.voter,
+                'Voter Poll': familyHead.voterPoll,
+                'Voter Poll Area': familyHead.voterPollArea,
+                'Survey Remark': item.surveyRemark,
             });
 
             // Add family members information
             const members = JSON.parse(item.members);
             members.forEach((member) => {
                 data.push({
-                    serialNumber: "", // No serial number for member rows
-                    division: "",
-                    ward: "",
-                    area: "",
-                    building: "",
-                    native: "",
-                    createdAt: "",
-                    employeeId: "",
-                    memberCount: "",
-                    familyHeadName: "",
-                    familyHeadBirthdate: "",
-                    familyHeadMobileNumber: "",
-                    familyHeadEducation: "",
-                    caste: "",
-                    voter: "",
-                    voterPoll: "",
-                    voterPollArea: "",
-                    memberName: member.memberName,
-                    memberBirthdate: member.memberBirthdate,
-                    memberMobileNumber: member.memberMobileNumber,
-                    memberEducation: member.memberEducation,
-                    memberAge: member.memberAge,
-                    memberVoter: member.voter,
-                    memberVoterPoll: member.voterPoll,
-                    memberVoterPollArea: member.voterPollArea,
-                    surveyRemark: "", // No survey remark for member rows
+                    'Serial Number': undefined,
+                    Division: undefined,
+                    Ward: undefined,
+                    Area: undefined,
+                    Building: undefined,
+                    'Room Number': undefined,
+                    Native: undefined,
+                    'Created At': undefined,
+                    'Employee Id': undefined,
+                    'Member Count': undefined,
+                    Name: member.memberName,
+                    Birthdate: member.memberBirthdate,
+                    'Mobile Number': member.memberMobileNumber,
+                    Education: member.memberEducation,
+                    Caste: undefined,
+                    Age: member.memberAge,
+                    Voter: member.voter,
+                    'Voter Poll': member.voterPoll,
+                    'Voter Poll Area': member.voterPollArea,
                 });
             });
         });
-
-        // Convert JSON data to worksheet
-        //const worksheet = XLSX.utils.json_to_sheet(data);
 
         // Manually reorder the columns to ensure surveyRemark is last
         const finalData = data.map((item) => {
