@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { account } from '../lib/appwrite';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -25,7 +26,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <Container>
       {user ? (
         <div className='welcome-container'>
           <h1>Welcome, {user.name}</h1>
@@ -35,7 +36,7 @@ const Home = () => {
       ) : (
         <p>Loading...</p>
       )}
-    </div>
+    </Container>
   );
 };
 

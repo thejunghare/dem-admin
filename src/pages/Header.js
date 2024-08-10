@@ -13,6 +13,7 @@ const Header = () => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/upload-voter">Upload Voter</Nav.Link>
+                        <Nav.Link href="/attendance">Attendance</Nav.Link>
                         <NavDropdown title="Export data" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="/calling-json-to-excel">Export calling data</NavDropdown.Item>
                             <NavDropdown.Item href="/json-to-excel">

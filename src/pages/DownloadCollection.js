@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import {Databases, Client, Query} from "appwrite";
+import React, { useState, useEffect } from "react";
+import { Databases, Client, Query } from "appwrite";
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -40,7 +40,7 @@ async function dumpCollection(collectionId) {
         console.log(`Downloaded ${documents.length} documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
-        const blob = new Blob([json], {type: "application/json"});
+        const blob = new Blob([json], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -84,7 +84,7 @@ async function dumpSurveyDeniedCollection(collectionId) {
         console.log(`Downloaded ${documents.length} surveyDenied documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
-        const blob = new Blob([json], {type: "application/json"});
+        const blob = new Blob([json], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -128,7 +128,7 @@ async function dumpRoomLockedCollection(collectionId) {
         console.log(`Downloaded ${documents.length} isRoomLocked documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
-        const blob = new Blob([json], {type: "application/json"});
+        const blob = new Blob([json], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -173,7 +173,7 @@ async function dumpFairSurveyCollection(collectionId) {
         console.log(`Downloaded ${documents.length} fair survey documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
-        const blob = new Blob([json], {type: "application/json"});
+        const blob = new Blob([json], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -200,7 +200,9 @@ const DownloadCollection = () => {
     const [downloadCount, setDownloadCount] = useState(0);
     const [selectedDate, setSelectedDate] = useState("");
     const [employeeId, setEmployeeId] = useState("");
-
+    const [isRoomLocked, setIsRoomLocked] = useState(false);
+    const [surveyDenied, setSurveyDenied] = useState(false);
+    const [fairSurvey, setFairSurvey] = useState(false);
 
     const fetchData = async () => {
         const response = await fetch(
@@ -215,7 +217,7 @@ const DownloadCollection = () => {
             const data = await fetchData();
             setData(data);
             setDivisions(
-                data.map((division) => ({id: division.id, name: division.name}))
+                data.map((division) => ({ id: division.id, name: division.name }))
             );
         };
 
@@ -247,13 +249,13 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
-   /* const formatDate = (date) => {
-        const d = new Date(date);
-        const month = ("0" + (d.getMonth() + 1)).slice(-2);
-        const day = ("0" + d.getDate()).slice(-2);
-        const year = d.getFullYear();
-        return `${year}-${month}-${day}`;
-    };*/
+    /* const formatDate = (date) => {
+         const d = new Date(date);
+         const month = ("0" + (d.getMonth() + 1)).slice(-2);
+         const day = ("0" + d.getDate()).slice(-2);
+         const year = d.getFullYear();
+         return `${year}-${month}-${day}`;
+     };*/
 
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
@@ -273,6 +275,19 @@ const DownloadCollection = () => {
                 Query.lessThanEqual("createdAt", dateEnd.toISOString()),
             ];
         }
+
+        if (isRoomLocked) {
+            filters.isRoomLocked = true;
+        }
+
+        if (surveyDenied) {
+            filters.surveyDenied = true;
+        }
+
+      if(fairSurvey){
+        filters.isRoomLocked = false;
+        filters.surveyDenied = false;
+      }
 
         try {
             setLoading(true);
@@ -305,17 +320,17 @@ const DownloadCollection = () => {
                 documents = documents.concat(response.documents);
                 setDownloadCount((prevCount) => prevCount + response.documents.length);
 
-                // Check if there are more documents to fetch
+
                 lastDocumentId =
                     response.documents.length > 0
                         ? response.documents[response.documents.length - 1].$id
                         : null;
             } while (response.documents.length > 0);
 
-            console.log(`Downloaded ${documents.length} documents.`); // Print the count of documents downloaded
+            console.log(`Downloaded ${documents.length} documents.`);
 
             const json = JSON.stringify(documents);
-            const blob = new Blob([json], {type: "application/json"});
+            const blob = new Blob([json], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
@@ -331,6 +346,8 @@ const DownloadCollection = () => {
     };
 
 
+
+
     return (
         <div>
             <Container>
@@ -339,9 +356,9 @@ const DownloadCollection = () => {
                     <Row className={'my-3'}>
                         <Col>
                             <Form.Select aria-label="Default select example"
-                                         value={selectedDivision}
-                                         onChange={handleDivisionChange}
-                                         size="sm"
+                                value={selectedDivision}
+                                onChange={handleDivisionChange}
+                                size="sm"
                             >
                                 <option value="">Select Division</option>
                                 {divisions.map((division) => (
@@ -354,10 +371,10 @@ const DownloadCollection = () => {
                         {/* select ward */}
                         <Col>
                             <Form.Select aria-label="Default select example"
-                                         value={selectedWard}
-                                         onChange={handleWardChange}
-                                         disabled={!selectedDivision}
-                                         size="sm"
+                                value={selectedWard}
+                                onChange={handleWardChange}
+                                disabled={!selectedDivision}
+                                size="sm"
                             >
                                 <option value="">Select Ward</option>
                                 {wards.map((ward) => (
@@ -374,10 +391,10 @@ const DownloadCollection = () => {
                         {/* select area */}
                         <Col>
                             <Form.Select aria-label="Default select example"
-                                         value={selectedArea}
-                                         onChange={handleAreaChange}
-                                         disabled={!selectedWard}
-                                         size="sm"
+                                value={selectedArea}
+                                onChange={handleAreaChange}
+                                disabled={!selectedWard}
+                                size="sm"
                             >
                                 <option value="">Select Area</option>
                                 {areas.map((area) => (
@@ -389,10 +406,10 @@ const DownloadCollection = () => {
                         </Col>
                         <Col>
                             <Form.Select aria-label="Default select example"
-                                         value={selectedBuilding}
-                                         onChange={(e) => setSelectedBuilding(e.target.value)}
-                                         disabled={!selectedArea}
-                                         size="sm"
+                                value={selectedBuilding}
+                                onChange={(e) => setSelectedBuilding(e.target.value)}
+                                disabled={!selectedArea}
+                                size="sm"
                             >
                                 <option value="">Select Building</option>
                                 {buildings.map((building) => (
@@ -405,7 +422,7 @@ const DownloadCollection = () => {
                     </Row>
 
                     {/* input date and employee */}
-                    <Row>
+                    <Row className={'my-3'}>
                         <Col>
                             <Form.Control
                                 type="text"
@@ -422,6 +439,36 @@ const DownloadCollection = () => {
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
                                 size='sm'
+                            />
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>
+                            <Form.Check
+                                type="checkbox"
+                                label="Locked Room"
+                                id="locked-room-checkbox"
+                                checked={isRoomLocked}
+                                onChange={(e) => setIsRoomLocked(e.target.checked)}
+                            />
+                        </Col>
+                        <Col>
+                            <Form.Check
+                                type="checkbox"
+                                label="Survey Denied"
+                                id="survey-denied-checkbox"
+                                checked={surveyDenied}
+                                onChange={(e) => setSurveyDenied(e.target.checked)}
+                            />
+                        </Col>
+ <Col>
+                            <Form.Check
+                                type="checkbox"
+                                label="Fair Survey"
+                                id="fair-survey-checkbox"
+                                checked={fairSurvey}
+                                onChange={(e) => setFairSurvey(e.target.checked)}
                             />
                         </Col>
                     </Row>

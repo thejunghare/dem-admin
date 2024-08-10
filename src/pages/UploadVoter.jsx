@@ -13,6 +13,8 @@ const client = new Client()
 const databases = new Databases(client);
 
 const UploadVoter = () => {
+    const [alertMessage, setAlertMessage] = React.useState(null);
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -34,27 +36,33 @@ const UploadVoter = () => {
             const collectionId = '66954dd3002fefd5a66f';
 
             try {
+                let idCounter = 1;
                 for (let item of jsonData) {
                     await databases.createDocument(
                         databaseId,
                         collectionId,
-                        ID.unique(),
+                        idCounter.toString(),
                         {
-                            name: item.name || null,
-                            caste: item.caste || null,
-                            age: item.age || null,
+                            ac_number: item.AC_NO || null,
+                            part_number: item.PART_NO || null,
+                            serial_number: item.SLNOINPART || null,
+                            house_number: item.HOUSE_NUMBER || null,
+                            first_name: item.APPLICANT_FIRST_NAME || null,
+                            last_name: item.APPLICANT_LAST_NAME || null,
+                            age: item.AGE || null,
+                            gender: item.GENDER || null,
+                            epic_number: item.EPIC_NUMBER || null,
+                            address: item.v_address_en || null,
+                            booth_address: item.EnglishBoothAddress || null,
                         }
                     );
+                    idCounter++; 
                 }
                 console.log('Documents uploaded successfully');
-                <Alert key={'success'} variant={'success'}>
-                    Uploaded successfully!
-                </Alert>
+                setAlertMessage({type: 'success', text: 'Uploaded successfully!'});
             } catch (error) {
                 console.error('Error uploading documents:', error);
-                <Alert key={'danger'} variant={'danger'}>
-                    Failed to upload!
-                </Alert>
+                setAlertMessage({type: 'danger', text: 'Failed to upload!'});
             }
         };
 
@@ -67,6 +75,11 @@ const UploadVoter = () => {
 
     return (
         <Container>
+            {alertMessage && (
+                <Alert key={alertMessage.type} variant={alertMessage.type}>
+                    {alertMessage.text}
+                </Alert>
+            )}
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Upload excel file</Form.Label>
