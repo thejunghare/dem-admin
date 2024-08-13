@@ -1,16 +1,20 @@
 from appwrite.client import Client
 from appwrite.services.databases import Databases
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 client = Client()
-client.set_endpoint('https://cloud.appwrite.io/v1')
-client.set_project('6648c699000032e4623c')
-client.set_key('6999a3b40772137237646f8485adbe712ddabbfc8868bc6e2450617391e03f6911fb8732a18b41412a93eb1ee820ad989bea2566729c8001a04ad1dfc63fb64cc31df7bf0361167d28b99c89982733c5d1a600b65470bf744669631ae2c0716e393b26314fe9c5fb6e39bc72da709d23a82eb75f986490d02738f1211476fd91')
+client.set_endpoint(os.getenv('APPWRITE_ENDPOINT'))
+client.set_project(os.getenv('APPWRITE_PROJECT'))
+client.set_key(os.getenv('APPWRITE_API_KEY'))
 
+DATABASE_ID = os.getenv('DATABASE_ID')
+COLLECTION_ID = os.getenv('COLLECTION_ID')
 
-
-def delete_all_documents():
-    database_id = '66502c6e0015d7be8526'  # Replace with your database ID
-    collection_id = '66954dd3002fefd5a66f'  # Replace with your collection ID
+def delete():
+    database_id = DATABASE_ID
+    collection_id = COLLECTION_ID
 
     databases = Databases(client)
     
@@ -32,6 +36,4 @@ def delete_all_documents():
                 print(f'Error deleting document with ID: {document_id} - {str(e)}')
 
 if __name__ == '__main__':
-    delete_all_documents()
-
-
+    delete()

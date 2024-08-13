@@ -35,42 +35,41 @@ const UploadVoter = () => {
             const databaseId = '66502c6e0015d7be8526';
             const collectionId = '66954dd3002fefd5a66f';
 
-
-const promises = jsonData.map((item, index) => 
-    databases.createDocument(
-        databaseId,
-        collectionId,
-        (index + 1).toString(),
-        {
-            ac_number: item.AC_NO || null,
-            part_number: item.PART_NO || null,
-            serial_number: item.SLNOINPART || null,
-            house_number: item.HOUSE_NUMBER || null,
-            first_name: item.APPLICANT_FIRST_NAME || null,
-            last_name: item.APPLICANT_LAST_NAME || null,
-            age: item.AGE || null,
-            gender: item.GENDER || null,
-            epic_number: item.EPIC_NUMBER || null,
-            address: item.v_address_en || null,
-            booth_address: item.EnglishBoothAddress || null,
-        }
-    )
-);
-
-try {
-    await Promise.all(promises);
-    setAlertMessage({ type: 'success', text: 'Uploaded successfully!' });
-} catch (error) {
-    console.error('Error uploading documents:', error);
-    setAlertMessage({ type: 'danger', text: 'Failed to upload!' });
-}
-
+            try {
+                let idCounter = 1;
+                for (let item of jsonData) {
+                    await databases.createDocument(
+                        databaseId,
+                        collectionId,
+                        ID.unique(),
+                        {
+                            ac_number: item.AC_NO || null,
+                            part_number: item.PART_NO || null,
+                            serial_number: item.SLNOINPART || null,
+                            house_number: item.HOUSE_NUMBER || null,
+                            first_name: item.APPLICANT_FIRST_NAME || null,
+                            last_name: item.APPLICANT_LAST_NAME || null,
+                            age: item.AGE || null,
+                            gender: item.GENDER || null,
+                            epic_number: item.EPIC_NUMBER || null,
+                            address: item.v_address_en || null,
+                            booth_address: item.EnglishBoothAddress || null,
+                        }
+                    );
+                    idCounter++; 
+                }
+                console.log('Documents uploaded successfully');
+                setAlertMessage({type: 'success', text: 'Uploaded successfully!'});
+            } catch (error) {
+                console.error('Error uploading documents:', error);
+                setAlertMessage({type: 'danger', text: 'Failed to upload!'});
+            }
         };
 
         reader.readAsBinaryString(file);
     };
 
-    const handleSubmit = (event) => {
+  const handleSubmit = (event) => {
         event.preventDefault();
     }
 
