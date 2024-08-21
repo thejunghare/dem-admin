@@ -5,6 +5,8 @@ from appwrite.services.databases import Databases
 import os
 import logging
 from dotenv import load_dotenv
+from contextlib import contextmanager
+import time
 
 load_dotenv()
 
@@ -25,15 +27,23 @@ databases = Databases(client)
 DATABASE_ID = os.getenv('DATABASE_ID')
 COLLECTION_ID = os.getenv('COLLECTION_ID')
 
+@contextmanager
+def timer():
+    start_time = time.time()
+    yield
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"Execution Time: {elapsed_time:.2f} seconds")
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'status': 'error', 'message': 'No file part'}), 400
-    
+
     file = request.files['file']
     if file.filename == '':
         return jsonify({'status': 'error', 'message': 'No selected file'}), 400
-    
+
     try:
         # Determine file type and read the file into a DataFrame
         if file.filename.endswith(('.xlsx', '.xls')):
@@ -42,7 +52,7 @@ def upload_file():
             df = pd.read_csv(file)
         else:
             return jsonify({'status': 'error', 'message': 'Unsupported file format'}), 400
-        
+
         # Prepare documents for upload
         documents = [
             {
@@ -60,7 +70,7 @@ def upload_file():
             }
             for _, row in df.iterrows()
         ]
-        
+
         # Upload documents to Appwrite using the SDK
         for index, doc in enumerate(documents):
             logging.info(f"Uploading document {index + 1}/{len(documents)}...")
@@ -70,12 +80,13 @@ def upload_file():
                 document_id="unique()",
                 data=doc
             )
-        
+
         return jsonify({'status': 'success', 'message': 'Uploaded successfully!'}), 200
-    
+
     except Exception as e:
         logging.error(f"Error uploading documents: {e}")
         return jsonify({'status': 'error', 'message': f'Failed to upload! Error: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with timer():
+        app.run(debug=True)
