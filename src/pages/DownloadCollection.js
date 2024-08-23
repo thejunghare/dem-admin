@@ -1,10 +1,15 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Databases, Client, Query } from "appwrite";
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {
+    Button,
+    Checkbox,
+    Label,
+    Select,
+    Datepicker,
+    TextInput,
+} from "flowbite-react";
+
 
 const appwrite = new Client();
 appwrite
@@ -249,14 +254,6 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
-    /* const formatDate = (date) => {
-         const d = new Date(date);
-         const month = ("0" + (d.getMonth() + 1)).slice(-2);
-         const day = ("0" + d.getDate()).slice(-2);
-         const year = d.getFullYear();
-         return `${year}-${month}-${day}`;
-     };*/
-
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
         if (selectedDivision) filters.division = selectedDivision;
@@ -284,10 +281,10 @@ const DownloadCollection = () => {
             filters.surveyDenied = true;
         }
 
-      if(fairSurvey){
-        filters.isRoomLocked = false;
-        filters.surveyDenied = false;
-      }
+        if (fairSurvey) {
+            filters.isRoomLocked = false;
+            filters.surveyDenied = false;
+        }
 
         try {
             setLoading(true);
@@ -345,20 +342,17 @@ const DownloadCollection = () => {
         }
     };
 
-
-
-
     return (
         <div>
-            <Container>
+            <div>
                 <div className="mt-2">
                     {/* select division && select ward*/}
-                    <Row className={'my-3'}>
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                    <div className={'my-3 flex flex-row items-center justify-evenly'}>
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedDivision}
                                 onChange={handleDivisionChange}
-                                size="sm"
+                                required
                             >
                                 <option value="">Select Division</option>
                                 {divisions.map((division) => (
@@ -366,11 +360,11 @@ const DownloadCollection = () => {
                                         {division.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
+                            </Select>
+                        </div>
                         {/* select ward */}
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedWard}
                                 onChange={handleWardChange}
                                 disabled={!selectedDivision}
@@ -382,15 +376,15 @@ const DownloadCollection = () => {
                                         {ward.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                    </Row>
+                            </Select>
+                        </div>
+                    </div>
 
                     {/* select area && select buildings */}
-                    <Row className={'my-3'}>
+                    <div className={'my-3  flex flex-row items-center justify-evenly'}>
                         {/* select area */}
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedArea}
                                 onChange={handleAreaChange}
                                 disabled={!selectedWard}
@@ -402,10 +396,10 @@ const DownloadCollection = () => {
                                         {area.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                            </Select>
+                        </div>
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedBuilding}
                                 onChange={(e) => setSelectedBuilding(e.target.value)}
                                 disabled={!selectedArea}
@@ -417,121 +411,122 @@ const DownloadCollection = () => {
                                         {building.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                    </Row>
+                            </Select>
+                        </div>
+                    </div>
 
                     {/* input date and employee */}
-                    <Row className={'my-3'}>
-                        <Col>
-                            <Form.Control
+                    <div className={'my-3  flex flex-row items-center justify-evenly'}>
+                        <div className="w-2/5">
+                            <TextInput
                                 type="text"
                                 value={employeeId}
                                 onChange={(e) => setEmployeeId(e.target.value)}
-                                size='sm'
                                 placeholder='Enter employee ID'
                             />
-                        </Col>
+                        </div>
 
-                        <Col>
-                            <Form.Control
-                                type="date"
+                        <div className="w-2/5">
+                            <Datepicker
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                size='sm'
                             />
-                        </Col>
-                    </Row>
+                        </div>
+                    </div>
 
-                    <Row>
-                        <Col>
-                            <Form.Check
+                    <div className="w-screen flex flex-row items-center justify-evenly">
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Locked Room"
+
                                 id="locked-room-checkbox"
                                 checked={isRoomLocked}
                                 onChange={(e) => setIsRoomLocked(e.target.checked)}
                             />
-                        </Col>
-                        <Col>
-                            <Form.Check
+                            <Label htmlFor="accept" className="flex">
+                                Locked
+                            </Label>
+                        </div>
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Survey Denied"
+
                                 id="survey-denied-checkbox"
                                 checked={surveyDenied}
                                 onChange={(e) => setSurveyDenied(e.target.checked)}
                             />
-                        </Col>
- <Col>
-                            <Form.Check
+                            <Label htmlFor="accept" className="flex">
+                                Denied
+                            </Label>
+                        </div>
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Fair Survey"
+
                                 id="fair-survey-checkbox"
                                 checked={fairSurvey}
                                 onChange={(e) => setFairSurvey(e.target.checked)}
                             />
-                        </Col>
-                    </Row>
+                            <Label htmlFor="accept" className="flex">
+                                Fair
+                            </Label>
+                        </div>
+                    </div>
 
                     {/* download button */}
-                    <Button
-                        className={'my-3'}
-                        size={'sm'}
-                        variant={'primary'}
-                        onClick={handleDownloadBasedOnSelection}
-                        disabled={!selectedDivision || loading}
-                    >
-                        Download
-                    </Button>
-
-                    {loading && (
-                        <div className="fs-6 fw-semibold">
-                            downloading...
-                            Downloaded {downloadCount} surveys
+                    <div className="flex items-center justify-center">
+                        <div>
+                            <Button
+                                className={'m-3'}
+                                onClick={handleDownloadBasedOnSelection}
+                                disabled={!selectedDivision || loading}
+                            >
+                                Download
+                            </Button>
                         </div>
-                    )}
+                        <div>
+                            {loading && (
+                                <div className="fs-6 fw-semibold">
+                                    downloading...
+                                    Downloaded {downloadCount} surveys
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
-            </Container>
+            </div>
 
 
-            <Container className={' mt-5 d-flex flex-row justify-content-around '}>
-                <div>
-                    <Button
-                        className={'mx-2'}
-                        size='sm'
-                        variant="secondary"
-                        onClick={() => dumpCollection("6650391e00030acc335b")}
-                    >
-                        Download all survey non-filter
-                    </Button>
+            <Button.Group className="flex items-center justify-center">
+                <Button
+                    color="gray"
+                    onClick={() => dumpCollection("6650391e00030acc335b")}
+                >
+                    All
+                </Button>
 
-                    <Button
-                        size='sm'
-                        variant="danger"
-                        className={'mx-2'}
-                        onClick={() => dumpSurveyDeniedCollection("6650391e00030acc335b")}
-                    >
-                        Download all denied survey
-                    </Button>
+                <Button
+                    color="gray"
+                    onClick={() => dumpSurveyDeniedCollection("6650391e00030acc335b")}
+                >
+                    Denied
+                </Button>
 
-                    <Button
-                        size='sm'
-                        className={'mx-2'}
-                        onClick={() => dumpRoomLockedCollection("6650391e00030acc335b")}
-                    >
-                        Download all locked room survey
-                    </Button>
+                <Button
+                    color="gray"
+                    onClick={() => dumpRoomLockedCollection("6650391e00030acc335b")}
+                >
+                    Locked
+                </Button>
 
-                    <Button
-                        size='sm'
-                        variant="success"
-                        className={'mx-2'}
-                        onClick={() => dumpFairSurveyCollection("6650391e00030acc335b")}
-                    >
-                        Download all fair survey
-                    </Button>
-                </div>
-            </Container>
+                <Button
+                    color="gray"
+                    onClick={() => dumpFairSurveyCollection("6650391e00030acc335b")}
+                >
+                    Fair
+                </Button>
+            </Button.Group>
         </div>
     )
         ;
