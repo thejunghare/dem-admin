@@ -1,0 +1,280 @@
+{
+    "total": 5000,
+    "documents": [
+        {
+            "$id": "6665555c002124237fae",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:10:22.087+00:00",
+            "$updatedAt": "2024-06-09T07:10:22.087+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "6665570e003363df1353",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:17:36.157+00:00",
+            "$updatedAt": "2024-06-09T07:17:36.157+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "6665573d0001646ad5dc",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:18:22.222+00:00",
+            "$updatedAt": "2024-06-09T07:18:22.222+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655800002a7f49ea98",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:21:38.008+00:00",
+            "$updatedAt": "2024-06-09T07:21:38.008+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "666558040026a677c570",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:21:43.150+00:00",
+            "$updatedAt": "2024-06-09T07:21:43.150+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "666558350002d039bb37",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:22:29.409+00:00",
+            "$updatedAt": "2024-06-09T07:22:29.409+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "6665584b0008cada48e8",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:22:51.594+00:00",
+            "$updatedAt": "2024-06-09T07:22:51.594+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "6665593a00012bf14da0",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:26:51.730+00:00",
+            "$updatedAt": "2024-06-09T07:26:51.730+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655967000c06037c90",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:27:36.302+00:00",
+            "$updatedAt": "2024-06-09T07:27:36.302+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655a02003009b19ccf",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:30:11.914+00:00",
+            "$updatedAt": "2024-06-09T07:30:11.914+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655b69001a258f31ce",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:36:13.651+00:00",
+            "$updatedAt": "2024-06-09T07:36:13.651+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655bbc000ec153003f",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:37:33.820+00:00",
+            "$updatedAt": "2024-06-09T07:37:33.820+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655c4a00153e3c8d3d",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:39:55.314+00:00",
+            "$updatedAt": "2024-06-09T07:39:55.314+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655c6700274e017e86",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:40:24.047+00:00",
+            "$updatedAt": "2024-06-09T07:40:24.047+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655c6a002b9a7bc6dc",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:40:27.577+00:00",
+            "$updatedAt": "2024-06-09T07:40:27.577+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655c88003ad64b4a42",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:40:57.358+00:00",
+            "$updatedAt": "2024-06-09T07:40:57.358+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655ca700106b14b0e2",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:41:27.762+00:00",
+            "$updatedAt": "2024-06-09T07:41:27.762+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655cc4003b84e4031e",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:41:57.447+00:00",
+            "$updatedAt": "2024-06-09T07:41:57.447+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655d270025720d706a",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:43:37.229+00:00",
+            "$updatedAt": "2024-06-09T07:43:37.229+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655ddd000879e18322",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:46:38.056+00:00",
+            "$updatedAt": "2024-06-09T07:46:38.056+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655e2e00044f36e1b4",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:47:59.091+00:00",
+            "$updatedAt": "2024-06-09T07:47:59.091+00:00",
+            "$permissions": [
+                "update(\"user:6665356b0026fa36184c\")",
+                "delete(\"user:6665356b0026fa36184c\")"
+            ]
+        },
+        {
+            "$id": "66655e9a00397a6dd618",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:49:47.733+00:00",
+            "$updatedAt": "2024-06-09T07:49:47.733+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655ebd0013474bd229",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:50:21.742+00:00",
+            "$updatedAt": "2024-06-09T07:50:21.742+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655ef0000b3113e1b3",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:51:12.716+00:00",
+            "$updatedAt": "2024-06-09T07:51:12.716+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        },
+        {
+            "$id": "66655f0d00115a59a574",
+            "$collectionId": "6650391e00030acc335b",
+            "$databaseId": "66502c6e0015d7be8526",
+            "$createdAt": "2024-06-09T07:51:41.661+00:00",
+            "$updatedAt": "2024-06-09T07:51:41.661+00:00",
+            "$permissions": [
+                "update(\"user:6663ecae001755266882\")",
+                "delete(\"user:6663ecae001755266882\")"
+            ]
+        }
+    ]
+}

@@ -1,66 +1,55 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
-	"github.com/xuri/excelize/v2"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	filePath := "test_2.xlsx" // Replace with your file path
-	appwriteEndpoint := os.Getenv("APPWRITE_ENDPOINT")
-	appwriteProject := os.Getenv("APPWRITE_PROJECT")
-	appwriteKey := os.Getenv("APPWRITE_API_KEY")
-	databaseID := os.Getenv("DATABASE_ID")
-	collectionID := os.Getenv("COLLECTION_ID")
+	err := godotenv.Load()
+	checkerror(err)
 
-	// Initialize Appwrite Client
-	client := appwrite.NewClient()
-	client.SetEndpoint(appwriteEndpoint)
-	client.SetProject(appwriteProject)
-	client.SetKey(appwriteKey)
+	client := appwrite.NewClient(
+		appwrite.WithEndpoint(os.Getenv("APPWRITE_ENDPOINT")),
+		appwrite.WithProject(os.Getenv("APPWRITE_PROJECT")),
+		appwrite.WithKey(os.Getenv("APPWRITE_API_KEY")),
+	)
 
 	databases := appwrite.NewDatabases(client)
 
-	// Open the Excel file
-	f, err := excelize.OpenFile(filePath)
+	databaseID := "66502c6e0015d7be8526"
+	survevyscollectionID := "6650391e00030acc335b"
+	filename := "surveys.json"
+	attributes := []string{"division", "ward", "area"}
+
+	documents, err := databases.ListDocuments(
+		databaseID,
+		survevyscollectionID,
+		appwrite.NewListDocumentsQueries().Attributes(attributes),
+	)
+	checkerror(err)
+
+	file, err := os.Create(filename)
+	checkerror(err)
+	defer file.Close()
+
+	encode := json.NewEncoder(file)
+	encode.Encode(documents)
+
+	/* for index, document := range documents.Documents {
+		log.Println(index, document.Id)
+	} */
+	fmt.Println("Documents successfully exported to", file)
+}
+
+func checkerror(err error) error {
 	if err != nil {
-		log.Fatalf("Failed to open Excel file: %v", err)
+		log.Fatalf("something went wrong: %v", err)
 	}
-
-	// Get the first sheet
-	sheetName := f.GetSheetName(0)
-	rows, err := f.GetRows(sheetName)
-	if err != nil {
-		log.Fatalf("Failed to get rows from Excel sheet: %v", err)
-	}
-
-	// Iterate over the rows and upload to Appwrite
-	for i, row := range rows[1:] {
-		documentData := map[string]interface{}{
-			"ac_number":     row[0],
-			"part_number":   row[1],
-			"serial_number": row[2],
-			"house_number":  row[3],
-			"first_name":    row[4],
-			"last_name":     row[5],
-			"age":           row[6],
-			"gender":        row[7],
-			"epic_number":   row[8],
-			"address":       row[9],
-			"booth_address": row[10],
-		}
-
-		documentID := strconv.Itoa(i + 1)
-		_, err := databases.CreateDocument(databaseID, collectionID, documentID, documentData)
-		if err != nil {
-			log.Printf("Failed to upload document %d: %v", i+1, err)
-		} else {
-			fmt.Printf("Uploaded document %d/%d\n", i+1, len(rows)-1)
-		}
-	}
+	return err
 }
