@@ -30,14 +30,13 @@ async function dumpCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
-            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} documents.`); // Print the count of documents downloaded
+        console.log(`Downloaded ${documents.length} documents.`);
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -74,14 +73,13 @@ async function dumpSurveyDeniedCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
-            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} surveyDenied documents.`); // Print the count of documents downloaded
+        console.log(`Downloaded ${documents.length} surveyDenied documents.`);
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -118,14 +116,13 @@ async function dumpRoomLockedCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
-            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} isRoomLocked documents.`); // Print the count of documents downloaded
+        console.log(`Downloaded ${documents.length} isRoomLocked documents.`);
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -163,14 +160,13 @@ async function dumpFairSurveyCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
-            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} fair survey documents.`); // Print the count of documents downloaded
+        console.log(`Downloaded ${documents.length} fair survey documents.`);
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -249,21 +245,13 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
-    /* const formatDate = (date) => {
-         const d = new Date(date);
-         const month = ("0" + (d.getMonth() + 1)).slice(-2);
-         const day = ("0" + d.getDate()).slice(-2);
-         const year = d.getFullYear();
-         return `${year}-${month}-${day}`;
-     };*/
-
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
         if (selectedDivision) filters.division = selectedDivision;
         if (selectedWard) filters.ward = selectedWard;
         if (selectedArea) filters.area = selectedArea;
-        if (selectedBuilding) filters.building = selectedBuilding; // Add building filter
-        if (employeeId) filters.employeeId = employeeId;  // Add employeeId filter
+        if (selectedBuilding) filters.building = selectedBuilding;
+        if (employeeId) filters.employeeId = employeeId;
 
         if (selectedDate) {
             const date = new Date(selectedDate);
@@ -284,47 +272,49 @@ const DownloadCollection = () => {
             filters.surveyDenied = true;
         }
 
-      if(fairSurvey){
-        filters.isRoomLocked = false;
-        filters.surveyDenied = false;
-      }
+        if (fairSurvey) {
+            filters.isRoomLocked = false;
+            filters.surveyDenied = false;
+        }
 
         try {
             setLoading(true);
             setDownloadCount(0);
 
             const databaseId = "66502c6e0015d7be8526";
-            const collectionId = "6650391e00030acc335b";
             let documents = [];
             let response;
             let lastDocumentId = null;
 
-            let queries = [];
-            Object.keys(filters).forEach((key) => {
-                if (Array.isArray(filters[key])) {
-                    queries = [...queries, ...filters[key]];
-                } else {
-                    queries.push(Query.equal(key, filters[key]));
-                }
-            });
-
             do {
+                const queries = [];
+
+                Object.keys(filters).forEach((key) => {
+                    if (Array.isArray(filters[key])) {
+                        queries.push(...filters[key]);
+                    } else {
+                        queries.push(Query.equal(key, filters[key]));
+                    }
+                });
+
+                if (lastDocumentId) {
+                    queries.push(Query.cursorAfter(lastDocumentId));
+                }
+
                 response = await database.listDocuments(
                     databaseId,
-                    collectionId,
-                    lastDocumentId
-                        ? [...queries, Query.cursorAfter(lastDocumentId)]
-                        : queries
+                    "survey",
+                    queries
                 );
 
                 documents = documents.concat(response.documents);
-                setDownloadCount((prevCount) => prevCount + response.documents.length);
-
 
                 lastDocumentId =
                     response.documents.length > 0
                         ? response.documents[response.documents.length - 1].$id
                         : null;
+
+                setDownloadCount(documents.length);
             } while (response.documents.length > 0);
 
             console.log(`Downloaded ${documents.length} documents.`);
@@ -334,31 +324,44 @@ const DownloadCollection = () => {
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "collection.json";
+            link.download = "filtered_collection.json";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         } catch (error) {
-            console.error(`Failed to dump collection: ${error.message}`);
+            console.error("Failed to download data:", error);
         } finally {
             setLoading(false);
         }
     };
 
+    const handleCollectionDump = async (collectionId) => {
+        await dumpCollection(collectionId);
+    };
 
+    const handleSurveyDeniedDump = async (collectionId) => {
+        await dumpSurveyDeniedCollection(collectionId);
+    };
 
+    const handleRoomLockedDump = async (collectionId) => {
+        await dumpRoomLockedCollection(collectionId);
+    };
+
+    const handleFairSurveyDump = async (collectionId) => {
+        await dumpFairSurveyCollection(collectionId);
+    };
 
     return (
-        <div>
-            <Container>
-                <div className="mt-2">
-                    {/* select division && select ward*/}
-                    <Row className={'my-3'}>
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+        <Container>
+            <Row>
+                <Col>
+                    <Form>
+                        <Form.Group controlId="divisionSelect">
+                            <Form.Label>Select Division</Form.Label>
+                            <Form.Control
+                                as="select"
                                 value={selectedDivision}
                                 onChange={handleDivisionChange}
-                                size="sm"
                             >
                                 <option value="">Select Division</option>
                                 {divisions.map((division) => (
@@ -366,15 +369,16 @@ const DownloadCollection = () => {
                                         {division.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                        {/* select ward */}
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="wardSelect">
+                            <Form.Label>Select Ward</Form.Label>
+                            <Form.Control
+                                as="select"
                                 value={selectedWard}
                                 onChange={handleWardChange}
                                 disabled={!selectedDivision}
-                                size="sm"
                             >
                                 <option value="">Select Ward</option>
                                 {wards.map((ward) => (
@@ -382,19 +386,16 @@ const DownloadCollection = () => {
                                         {ward.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                    </Row>
+                            </Form.Control>
+                        </Form.Group>
 
-                    {/* select area && select buildings */}
-                    <Row className={'my-3'}>
-                        {/* select area */}
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                        <Form.Group controlId="areaSelect">
+                            <Form.Label>Select Area</Form.Label>
+                            <Form.Control
+                                as="select"
                                 value={selectedArea}
                                 onChange={handleAreaChange}
                                 disabled={!selectedWard}
-                                size="sm"
                             >
                                 <option value="">Select Area</option>
                                 {areas.map((area) => (
@@ -402,14 +403,16 @@ const DownloadCollection = () => {
                                         {area.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                        <Col>
-                            <Form.Select aria-label="Default select example"
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="buildingSelect">
+                            <Form.Label>Select Building</Form.Label>
+                            <Form.Control
+                                as="select"
                                 value={selectedBuilding}
                                 onChange={(e) => setSelectedBuilding(e.target.value)}
                                 disabled={!selectedArea}
-                                size="sm"
                             >
                                 <option value="">Select Building</option>
                                 {buildings.map((building) => (
@@ -417,124 +420,103 @@ const DownloadCollection = () => {
                                         {building.name}
                                     </option>
                                 ))}
-                            </Form.Select>
-                        </Col>
-                    </Row>
+                            </Form.Control>
+                        </Form.Group>
 
-                    {/* input date and employee */}
-                    <Row className={'my-3'}>
-                        <Col>
-                            <Form.Control
-                                type="text"
-                                value={employeeId}
-                                onChange={(e) => setEmployeeId(e.target.value)}
-                                size='sm'
-                                placeholder='Enter employee ID'
-                            />
-                        </Col>
-
-                        <Col>
+                        <Form.Group controlId="dateSelect">
+                            <Form.Label>Select Date</Form.Label>
                             <Form.Control
                                 type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                size='sm'
                             />
-                        </Col>
-                    </Row>
+                        </Form.Group>
 
-                    <Row>
-                        <Col>
+                        <Form.Group controlId="employeeId">
+                            <Form.Label>Employee ID</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter Employee ID"
+                                value={employeeId}
+                                onChange={(e) => setEmployeeId(e.target.value)}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="isRoomLockedCheckbox">
                             <Form.Check
                                 type="checkbox"
-                                label="Locked Room"
-                                id="locked-room-checkbox"
+                                label="Room Locked"
                                 checked={isRoomLocked}
                                 onChange={(e) => setIsRoomLocked(e.target.checked)}
                             />
-                        </Col>
-                        <Col>
+                        </Form.Group>
+
+                        <Form.Group controlId="surveyDeniedCheckbox">
                             <Form.Check
                                 type="checkbox"
                                 label="Survey Denied"
-                                id="survey-denied-checkbox"
                                 checked={surveyDenied}
                                 onChange={(e) => setSurveyDenied(e.target.checked)}
                             />
-                        </Col>
- <Col>
+                        </Form.Group>
+
+                        <Form.Group controlId="fairSurveyCheckbox">
                             <Form.Check
                                 type="checkbox"
                                 label="Fair Survey"
-                                id="fair-survey-checkbox"
                                 checked={fairSurvey}
                                 onChange={(e) => setFairSurvey(e.target.checked)}
                             />
-                        </Col>
-                    </Row>
+                        </Form.Group>
 
-                    {/* download button */}
-                    <Button
-                        className={'my-3'}
-                        size={'sm'}
-                        variant={'primary'}
-                        onClick={handleDownloadBasedOnSelection}
-                        disabled={!selectedDivision || loading}
-                    >
-                        Download
-                    </Button>
+                        <Button
+                            variant="primary"
+                            onClick={handleDownloadBasedOnSelection}
+                            disabled={loading}
+                        >
+                            Download Based on Selection
+                        </Button>
 
-                    {loading && (
-                        <div className="fs-6 fw-semibold">
-                            downloading...
-                            Downloaded {downloadCount} surveys
-                        </div>
-                    )}
-                </div>
-            </Container>
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleCollectionDump("survey")}
+                            disabled={loading}
+                        >
+                            Dump Full Collection
+                        </Button>
 
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleSurveyDeniedDump("survey")}
+                            disabled={loading}
+                        >
+                            Dump Survey Denied Collection
+                        </Button>
 
-            <Container className={' mt-5 d-flex flex-row justify-content-around '}>
-                <div>
-                    <Button
-                        className={'mx-2'}
-                        size='sm'
-                        variant="secondary"
-                        onClick={() => dumpCollection("6650391e00030acc335b")}
-                    >
-                        Download all survey non-filter
-                    </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleRoomLockedDump("survey")}
+                            disabled={loading}
+                        >
+                            Dump Room Locked Collection
+                        </Button>
 
-                    <Button
-                        size='sm'
-                        variant="danger"
-                        className={'mx-2'}
-                        onClick={() => dumpSurveyDeniedCollection("6650391e00030acc335b")}
-                    >
-                        Download all denied survey
-                    </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleFairSurveyDump("survey")}
+                            disabled={loading}
+                        >
+                            Dump Fair Survey Collection
+                        </Button>
 
-                    <Button
-                        size='sm'
-                        className={'mx-2'}
-                        onClick={() => dumpRoomLockedCollection("6650391e00030acc335b")}
-                    >
-                        Download all locked room survey
-                    </Button>
-
-                    <Button
-                        size='sm'
-                        variant="success"
-                        className={'mx-2'}
-                        onClick={() => dumpFairSurveyCollection("6650391e00030acc335b")}
-                    >
-                        Download all fair survey
-                    </Button>
-                </div>
-            </Container>
-        </div>
-    )
-        ;
+                        {loading && (
+                            <p>Downloading... {downloadCount} documents downloaded so far.</p>
+                        )}
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
+    );
 };
 
 export default DownloadCollection;

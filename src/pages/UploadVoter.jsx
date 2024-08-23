@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
-import {Client, Databases, ID} from 'appwrite';
+import { Client, Databases, ID } from 'appwrite';
 
 const client = new Client()
     .setEndpoint("https://cloud.appwrite.io/v1")
@@ -27,7 +27,7 @@ const UploadVoter = () => {
 
         reader.onload = async (e) => {
             const data = e.target.result;
-            const workbook = XLSX.read(data, {type: 'binary'});
+            const workbook = XLSX.read(data, { type: 'binary' });
             const sheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(sheet);
@@ -36,7 +36,7 @@ const UploadVoter = () => {
             const collectionId = '66954dd3002fefd5a66f';
 
             try {
-                let idCounter = 1;
+                //let idCounter = 1;
                 for (let item of jsonData) {
                     await databases.createDocument(
                         databaseId,
@@ -56,20 +56,20 @@ const UploadVoter = () => {
                             booth_address: item.EnglishBoothAddress || null,
                         }
                     );
-                    idCounter++; 
+                    // idCounter++;
                 }
                 console.log('Documents uploaded successfully');
-                setAlertMessage({type: 'success', text: 'Uploaded successfully!'});
+                setAlertMessage({ type: 'success', text: 'Uploaded successfully!' });
             } catch (error) {
                 console.error('Error uploading documents:', error);
-                setAlertMessage({type: 'danger', text: 'Failed to upload!'});
+                setAlertMessage({ type: 'danger', text: 'Failed to upload!' });
             }
         };
 
         reader.readAsBinaryString(file);
     };
 
-  const handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
     }
 
@@ -83,7 +83,7 @@ const UploadVoter = () => {
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Upload excel file</Form.Label>
-                    <Form.Control size={'sm'} type="file" placeholder="your excel file" onChange={handleFileChange}/>
+                    <Form.Control size={'sm'} type="file" placeholder="your excel file" onChange={handleFileChange} />
                 </Form.Group>
 
                 <Button size={'sm'} variant="primary" type="submit">

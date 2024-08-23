@@ -1,6 +1,7 @@
 {
   "name": "json-to-excel",
   "version": "0.1.0",
+  "homepage": "https://thejunghare.github.io/dem-admin/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
