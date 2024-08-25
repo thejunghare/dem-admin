@@ -21,16 +21,17 @@ func main() {
 	)
 
 	databases := appwrite.NewDatabases(client)
+	auth := appwrite.NewUsers(client)
 
 	databaseID := "66502c6e0015d7be8526"
 	survevyscollectionID := "6650391e00030acc335b"
 	filename := "surveys.json"
-	attributes := []string{"division", "ward", "area"}
+	//attributes := []string{"division", "ward", "area"}
 
 	documents, err := databases.ListDocuments(
 		databaseID,
 		survevyscollectionID,
-		appwrite.NewListDocumentsQueries().Attributes(attributes),
+		//appwrite.NewListDocumentsQueries().Attributes(attributes),
 	)
 	checkerror(err)
 
@@ -45,6 +46,14 @@ func main() {
 		log.Println(index, document.Id)
 	} */
 	fmt.Println("Documents successfully exported to", file)
+
+	users, err := auth.List()
+	checkerror(err)
+	//log.Println(users)
+
+	for index, user := range users.Users {
+		log.Println("user no:", index, "user info", user)
+	}
 }
 
 func checkerror(err error) error {
