@@ -13,6 +13,7 @@ const Header = () => {
                 <NavbarLink href="/home" active>
                     Dashboard
                 </NavbarLink>
+                <NavbarLink href="/clients">Client Info</NavbarLink>
                 <NavbarLink href="/download-documents">Download</NavbarLink>
                 <NavbarLink href="/calling-json-to-excel">Export Json</NavbarLink>
             </NavbarCollapse>

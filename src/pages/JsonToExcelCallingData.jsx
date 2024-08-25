@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { FileInput, Label, Button } from "flowbite-react";
+import { FiFileText } from "react-icons/fi";
 
 const JsonToExcelCallingData = () => {
     const [jsonData, setJsonData] = useState([]);
@@ -113,12 +114,12 @@ const JsonToExcelCallingData = () => {
 
 
     return (
-        <div id="fileUpload" className="max-w-md container">
+        <div id="fileUpload" className="max-w-md container m-3">
             <div className="mb-2 block">
                 <Label htmlFor="file" value="Upload file" />
             </div>
-            <FileInput id="file" onChange={handleFileUpload} helperText="A profile picture is useful to confirm your are logged into your account" />
-            <Button onClick={handleExport}>Export to Excel</Button>
+            <FileInput id="file" onChange={handleFileUpload} helperText="A vaild Json downloaded from dashboard download tab." />
+            <Button onClick={handleExport} pill size={"sm"} outline gradientDuoTone="greenToBlue">Export to Excel <FiFileText className="ml-2 h-5 w-5" /></Button>
         </div>
     );
 };

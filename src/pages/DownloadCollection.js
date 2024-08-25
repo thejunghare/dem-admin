@@ -427,7 +427,8 @@ const DownloadCollection = () => {
                         </div>
 
                         <div className="w-2/5">
-                            <Datepicker
+                            <input
+                                type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
