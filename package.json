@@ -34,8 +34,13 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "airbnb-base",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -51,6 +56,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
     "gh-pages": "^6.1.1",
     "tailwindcss": "^3.4.10"
   }
