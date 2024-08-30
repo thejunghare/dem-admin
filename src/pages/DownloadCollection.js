@@ -6,7 +6,6 @@ import {
     Checkbox,
     Label,
     Select,
-    Datepicker,
     TextInput,
 } from "flowbite-react";
 
@@ -35,7 +34,7 @@ async function dumpCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
-            // Check if there are more documents to fetch
+
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
@@ -259,8 +258,8 @@ const DownloadCollection = () => {
         if (selectedDivision) filters.division = selectedDivision;
         if (selectedWard) filters.ward = selectedWard;
         if (selectedArea) filters.area = selectedArea;
-        if (selectedBuilding) filters.building = selectedBuilding; // Add building filter
-        if (employeeId) filters.employeeId = employeeId;  // Add employeeId filter
+        if (selectedBuilding) filters.building = selectedBuilding;
+        if (employeeId) filters.employeeId = employeeId;
 
         if (selectedDate) {
             const date = new Date(selectedDate);
@@ -296,27 +295,22 @@ const DownloadCollection = () => {
             let response;
             let lastDocumentId = null;
 
-            let queries = [];
-            Object.keys(filters).forEach((key) => {
+            const queries = Object.keys(filters).reduce((acc, key) => {
                 if (Array.isArray(filters[key])) {
-                    queries = [...queries, ...filters[key]];
-                } else {
-                    queries.push(Query.equal(key, filters[key]));
+                    return [...acc, ...filters[key]];
                 }
-            });
+                return [...acc, Query.equal(key, filters[key])];
+            }, []);
 
             do {
                 response = await database.listDocuments(
                     databaseId,
                     collectionId,
-                    lastDocumentId
-                        ? [...queries, Query.cursorAfter(lastDocumentId)]
-                        : queries
+                    lastDocumentId ? [...queries, Query.cursorAfter(lastDocumentId)] : queries
                 );
 
                 documents = documents.concat(response.documents);
-                setDownloadCount((prevCount) => prevCount + response.documents.length);
-
+                //setDownloadCount((prevCount) => prevCount + response.documents.length);
 
                 lastDocumentId =
                     response.documents.length > 0
@@ -324,7 +318,7 @@ const DownloadCollection = () => {
                         : null;
             } while (response.documents.length > 0);
 
-            console.log(`Downloaded ${documents.length} documents.`);
+            // console.log(`Downloaded ${documents.length} documents.`);
 
             const json = JSON.stringify(documents);
             const blob = new Blob([json], { type: "application/json" });
@@ -341,6 +335,7 @@ const DownloadCollection = () => {
             setLoading(false);
         }
     };
+
 
     return (
         <div>
