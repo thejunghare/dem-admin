@@ -12,6 +12,10 @@ import { account } from './lib/appwrite';
 import { ClientProvider } from './lib/context/ClientContext';
 import { Spinner } from "flowbite-react";
 
+const AuthenticatedRoute = ({ element, isAuthenticated }) => {
+      return isAuthenticated ? element : <Navigate to="/login" />;
+};
+
 const App = () => {
       const [isAuthenticated, setIsAuthenticated] = useState(false);
       const [loading, setLoading] = useState(true);
@@ -31,9 +35,7 @@ const App = () => {
             checkAuth();
       }, []);
 
-      const handleLogin = () => {
-            setIsAuthenticated(true);
-      };
+      const handleLogin = () => setIsAuthenticated(true);
 
       const handleLogout = async () => {
             try {
@@ -51,7 +53,6 @@ const App = () => {
                               <Spinner aria-label="Loading..." />
                         </div>
                   </div>
-
             );
       }
 
@@ -60,30 +61,12 @@ const App = () => {
                   <Router>
                         {isAuthenticated && <Header onLogout={handleLogout} />}
                         <Routes>
-                              <Route
-                                    path="/login"
-                                    element={isAuthenticated ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />}
-                              />
-                              <Route
-                                    path="/home"
-                                    element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
-                              />
-                              <Route
-                                    path="/"
-                                    element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />}
-                              />
-                              <Route
-                                    path="/calling-json-to-excel"
-                                    element={isAuthenticated ? <JsonToExcelCallingData /> : <Navigate to="/login" />}
-                              />
-                              <Route
-                                    path="/download-documents"
-                                    element={isAuthenticated ? <DownloadCollection /> : <Navigate to="/login" />}
-                              />
-                              <Route
-                                    path="/clients"
-                                    element={isAuthenticated ? <Client /> : <Navigate to="/login" />}
-                              />
+                              <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />} />
+                              <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+                              <Route path="/home" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<Home />} />} />
+                              <Route path="/calling-json-to-excel" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<JsonToExcelCallingData />} />} />
+                              <Route path="/download-documents" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<DownloadCollection />} />} />
+                              <Route path="/clients" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<Client />} />} />
                         </Routes>
                   </Router>
             </ClientProvider>
