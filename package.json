@@ -1,5 +1,5 @@
 {
-  "name": "json-to-excel",
+  "name": "dem-admin",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -35,9 +35,7 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest",
-      "airbnb-base",
-      "plugin:prettier/recommended"
+      "react-app/jest"
     ],
     "rules": {
       "no-unused-vars": "off"
@@ -57,9 +55,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "eslint": "^8.57.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.35.0",
     "gh-pages": "^6.1.1",
     "tailwindcss": "^3.4.10"
   }
