@@ -1,9 +1,8 @@
-import React, {useState} from "react";
-import {saveAs} from "file-saver";
+import React, { useState } from "react";
+import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { FileInput, Label, Button } from "flowbite-react";
+import { FiFileText } from "react-icons/fi";
 
 const JsonToExcelCallingData = () => {
     const [jsonData, setJsonData] = useState([]);
@@ -34,7 +33,7 @@ const JsonToExcelCallingData = () => {
         }
 
         const data = [];
-        let serialNumber = 1; 
+        let serialNumber = 1;
 
         jsonData.forEach((item) => {
             const familyHead = JSON.parse(item.familyhead);
@@ -92,8 +91,8 @@ const JsonToExcelCallingData = () => {
 
         // Manually reorder the columns to ensure surveyRemark is last
         const finalData = data.map((item) => {
-            const {surveyRemark, ...rest} = item;
-            return {...rest, surveyRemark};
+            const { surveyRemark, ...rest } = item;
+            return { ...rest, surveyRemark };
         });
 
         // Create a new worksheet with the reordered data
@@ -109,26 +108,19 @@ const JsonToExcelCallingData = () => {
             type: "array",
         });
 
-        const blob = new Blob([excelBuffer], {type: "application/octet-stream"});
+        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
         saveAs(blob, "data.xlsx");
     };
 
 
     return (
-        <Container>
-            <Form>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
-                    <Form.Label>Export excel for calling</Form.Label>
-                    <Form.Control
-                        type="file"
-                        accept=".json"
-                        id="fileUpload"
-                        onChange={handleFileUpload}
-                    />
-                </Form.Group>
-                <Button variant={'primary'} size={'sm'} onClick={handleExport}>Export to Excel</Button>
-            </Form>
-        </Container>
+        <div id="fileUpload" className="max-w-md container m-3">
+            <div className="mb-2 block">
+                <Label htmlFor="file" value="Upload file" />
+            </div>
+            <FileInput id="file" onChange={handleFileUpload} helperText="A vaild Json downloaded from dashboard download tab." />
+            <Button onClick={handleExport} pill size={"sm"} outline gradientDuoTone="greenToBlue">Export to Excel <FiFileText className="ml-2 h-5 w-5" /></Button>
+        </div>
     );
 };
 

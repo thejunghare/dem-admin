@@ -1,7 +1,6 @@
 {
-  "name": "json-to-excel",
+  "name": "dem-admin",
   "version": "0.1.0",
-  "homepage": "https://thejunghare.github.io/dem-admin/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -9,18 +8,20 @@
     "@testing-library/user-event": "^13.5.0",
     "appwrite": "^15.0.0",
     "axios": "^1.7.2",
-    "bootstrap": "^5.3.3",
     "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
+    "eslint-config-airbnb-base": "^15.0.0",
     "file-saver": "^2.0.5",
+    "flowbite-react": "^0.10.1",
     "node-appwrite": "^13.0.0",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.4",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.24.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.5",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
     "xlsx-style": "^0.8.13"
@@ -29,15 +30,16 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "tailwindcss": "^3.4.10"
   }
 }

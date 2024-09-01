@@ -12,9 +12,13 @@ export function UserProvider(props) {
   const [user, setUser] = useState(null);
 
   async function login(email, password) {
-    const loggedIn = await account.createEmailPasswordSession(email, password);
-    setUser(loggedIn);
-    window.location.replace("/");
+    try {
+      const loggedIn = await account.createEmailPasswordSession(email, password);
+      setUser(loggedIn);
+      window.location.replace("/");
+    } catch (error) {
+      console.error(`Failed! ${error}`)
+    }
   }
 
   async function logout() {

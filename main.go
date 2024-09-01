@@ -1,55 +1,43 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
+	"github.com/appwrite/sdk-for-go/client"
+	"github.com/appwrite/sdk-for-go/databases"
 	"github.com/joho/godotenv"
+	"github.com/thejunghare/dem-admin/pkg"
+)
+
+var (
+	appwrite_client   client.Client
+	appwrite_database *databases.Databases
+	json_file_path    string
 )
 
 func main() {
 	err := godotenv.Load()
-	checkerror(err)
-
-	client := appwrite.NewClient(
-		appwrite.WithEndpoint(os.Getenv("APPWRITE_ENDPOINT")),
-		appwrite.WithProject(os.Getenv("APPWRITE_PROJECT")),
-		appwrite.WithKey(os.Getenv("APPWRITE_API_KEY")),
-	)
-
-	databases := appwrite.NewDatabases(client)
-
-	databaseID := "66502c6e0015d7be8526"
-	survevyscollectionID := "6650391e00030acc335b"
-	filename := "surveys.json"
-	attributes := []string{"division", "ward", "area"}
-
-	documents, err := databases.ListDocuments(
-		databaseID,
-		survevyscollectionID,
-		appwrite.NewListDocumentsQueries().Attributes(attributes),
-	)
-	checkerror(err)
-
-	file, err := os.Create(filename)
-	checkerror(err)
-	defer file.Close()
-
-	encode := json.NewEncoder(file)
-	encode.Encode(documents)
-
-	/* for index, document := range documents.Documents {
-		log.Println(index, document.Id)
-	} */
-	fmt.Println("Documents successfully exported to", file)
-}
-
-func checkerror(err error) error {
 	if err != nil {
-		log.Fatalf("something went wrong: %v", err)
+		log.Fatal("Error loading .env file")
 	}
-	return err
+
+	appwrite_project_id := os.Getenv("APPWRITE_PROJECT")
+	appwrite_project_api_key := os.Getenv("APPWRITE_API_KEY")
+
+	database_id := os.Getenv("DATABASE_ID")
+	collection_id := os.Getenv("TEST_ID") //test collection
+	json_file_path = "./test.json"
+
+	appwrite_client = appwrite.NewClient(
+		appwrite.WithProject(appwrite_project_id),
+		appwrite.WithKey(appwrite_project_api_key),
+	)
+
+	appwrite_database = appwrite.NewDatabases(appwrite_client)
+
+	//pkg.Delete(appwrite_database, database_id, collection_id)
+	//pkg.List(appwrite_database, database_id, collection_id)
+	pkg.Create(appwrite_database, database_id, collection_id, json_file_path)
 }

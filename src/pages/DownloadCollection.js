@@ -1,10 +1,15 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Databases, Client, Query } from "appwrite";
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {
+    Button,
+    Checkbox,
+    Label,
+    Select,
+    TextInput,
+} from "flowbite-react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const appwrite = new Client();
 appwrite
@@ -30,13 +35,14 @@ async function dumpCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
+
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} documents.`);
+        console.log(`Downloaded ${documents.length} documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -73,13 +79,14 @@ async function dumpSurveyDeniedCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
+            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} surveyDenied documents.`);
+        console.log(`Downloaded ${documents.length} surveyDenied documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -116,13 +123,14 @@ async function dumpRoomLockedCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
+            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} isRoomLocked documents.`);
+        console.log(`Downloaded ${documents.length} isRoomLocked documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -160,13 +168,14 @@ async function dumpFairSurveyCollection(collectionId) {
 
             documents = documents.concat(response.documents);
 
+            // Check if there are more documents to fetch
             lastDocumentId =
                 response.documents.length > 0
                     ? response.documents[response.documents.length - 1].$id
                     : null;
         } while (response.documents.length > 0);
 
-        console.log(`Downloaded ${documents.length} fair survey documents.`);
+        console.log(`Downloaded ${documents.length} fair survey documents.`); // Print the count of documents downloaded
 
         const json = JSON.stringify(documents);
         const blob = new Blob([json], { type: "application/json" });
@@ -245,6 +254,8 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
+    const downloadcomplete = () => toast("Downloaded!");
+
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
         if (selectedDivision) filters.division = selectedDivision;
@@ -282,86 +293,66 @@ const DownloadCollection = () => {
             setDownloadCount(0);
 
             const databaseId = "66502c6e0015d7be8526";
+            const collectionId = "6650391e00030acc335b";
             let documents = [];
             let response;
             let lastDocumentId = null;
 
-            do {
-                const queries = [];
-
-                Object.keys(filters).forEach((key) => {
-                    if (Array.isArray(filters[key])) {
-                        queries.push(...filters[key]);
-                    } else {
-                        queries.push(Query.equal(key, filters[key]));
-                    }
-                });
-
-                if (lastDocumentId) {
-                    queries.push(Query.cursorAfter(lastDocumentId));
+            const queries = Object.keys(filters).reduce((acc, key) => {
+                if (Array.isArray(filters[key])) {
+                    return [...acc, ...filters[key]];
                 }
+                return [...acc, Query.equal(key, filters[key])];
+            }, []);
 
+            do {
                 response = await database.listDocuments(
                     databaseId,
-                    "survey",
-                    queries
+                    collectionId,
+                    lastDocumentId ? [...queries, Query.cursorAfter(lastDocumentId)] : queries
                 );
 
                 documents = documents.concat(response.documents);
+                //setDownloadCount((prevCount) => prevCount + response.documents.length);
 
                 lastDocumentId =
                     response.documents.length > 0
                         ? response.documents[response.documents.length - 1].$id
                         : null;
-
-                setDownloadCount(documents.length);
             } while (response.documents.length > 0);
 
-            console.log(`Downloaded ${documents.length} documents.`);
+            // console.log(`Downloaded ${documents.length} documents.`);
 
             const json = JSON.stringify(documents);
             const blob = new Blob([json], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "filtered_collection.json";
+            link.download = "collection.json";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            downloadcomplete()
         } catch (error) {
-            console.error("Failed to download data:", error);
+            console.error(`Failed to dump collection: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleCollectionDump = async (collectionId) => {
-        await dumpCollection(collectionId);
-    };
-
-    const handleSurveyDeniedDump = async (collectionId) => {
-        await dumpSurveyDeniedCollection(collectionId);
-    };
-
-    const handleRoomLockedDump = async (collectionId) => {
-        await dumpRoomLockedCollection(collectionId);
-    };
-
-    const handleFairSurveyDump = async (collectionId) => {
-        await dumpFairSurveyCollection(collectionId);
-    };
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <Form>
-                        <Form.Group controlId="divisionSelect">
-                            <Form.Label>Select Division</Form.Label>
-                            <Form.Control
-                                as="select"
+        <div>
+            <div>
+                <ToastContainer />
+                <div className="mt-2">
+                    {/* select division && select ward*/}
+                    <div className={'my-3 flex flex-row items-center justify-evenly'}>
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedDivision}
                                 onChange={handleDivisionChange}
+                                required
                             >
                                 <option value="">Select Division</option>
                                 {divisions.map((division) => (
@@ -369,16 +360,15 @@ const DownloadCollection = () => {
                                         {division.name}
                                     </option>
                                 ))}
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="wardSelect">
-                            <Form.Label>Select Ward</Form.Label>
-                            <Form.Control
-                                as="select"
+                            </Select>
+                        </div>
+                        {/* select ward */}
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedWard}
                                 onChange={handleWardChange}
                                 disabled={!selectedDivision}
+                                size="sm"
                             >
                                 <option value="">Select Ward</option>
                                 {wards.map((ward) => (
@@ -386,16 +376,19 @@ const DownloadCollection = () => {
                                         {ward.name}
                                     </option>
                                 ))}
-                            </Form.Control>
-                        </Form.Group>
+                            </Select>
+                        </div>
+                    </div>
 
-                        <Form.Group controlId="areaSelect">
-                            <Form.Label>Select Area</Form.Label>
-                            <Form.Control
-                                as="select"
+                    {/* select area && select buildings */}
+                    <div className={'my-3  flex flex-row items-center justify-evenly'}>
+                        {/* select area */}
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedArea}
                                 onChange={handleAreaChange}
                                 disabled={!selectedWard}
+                                size="sm"
                             >
                                 <option value="">Select Area</option>
                                 {areas.map((area) => (
@@ -403,16 +396,14 @@ const DownloadCollection = () => {
                                         {area.name}
                                     </option>
                                 ))}
-                            </Form.Control>
-                        </Form.Group>
-
-                        <Form.Group controlId="buildingSelect">
-                            <Form.Label>Select Building</Form.Label>
-                            <Form.Control
-                                as="select"
+                            </Select>
+                        </div>
+                        <div className="w-2/5">
+                            <Select aria-label="Default select example"
                                 value={selectedBuilding}
                                 onChange={(e) => setSelectedBuilding(e.target.value)}
                                 disabled={!selectedArea}
+                                size="sm"
                             >
                                 <option value="">Select Building</option>
                                 {buildings.map((building) => (
@@ -420,103 +411,127 @@ const DownloadCollection = () => {
                                         {building.name}
                                     </option>
                                 ))}
-                            </Form.Control>
-                        </Form.Group>
+                            </Select>
+                        </div>
+                    </div>
 
-                        <Form.Group controlId="dateSelect">
-                            <Form.Label>Select Date</Form.Label>
-                            <Form.Control
+                    {/* input date and employee */}
+                    <div className={'my-3  flex flex-row items-center justify-evenly'}>
+                        <div className="w-2/5">
+                            <TextInput
+                                type="text"
+                                value={employeeId}
+                                onChange={(e) => setEmployeeId(e.target.value)}
+                                placeholder='Enter employee ID'
+                            />
+                        </div>
+
+                        <div className="w-2/5">
+                            <input
                                 type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
-                        </Form.Group>
+                        </div>
+                    </div>
 
-                        <Form.Group controlId="employeeId">
-                            <Form.Label>Employee ID</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter Employee ID"
-                                value={employeeId}
-                                onChange={(e) => setEmployeeId(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group controlId="isRoomLockedCheckbox">
-                            <Form.Check
+                    <div className="w-screen flex flex-row items-center justify-evenly">
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Room Locked"
+
+                                id="locked-room-checkbox"
                                 checked={isRoomLocked}
                                 onChange={(e) => setIsRoomLocked(e.target.checked)}
                             />
-                        </Form.Group>
-
-                        <Form.Group controlId="surveyDeniedCheckbox">
-                            <Form.Check
+                            <Label htmlFor="accept" className="flex">
+                                Locked
+                            </Label>
+                        </div>
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Survey Denied"
+
+                                id="survey-denied-checkbox"
                                 checked={surveyDenied}
                                 onChange={(e) => setSurveyDenied(e.target.checked)}
                             />
-                        </Form.Group>
-
-                        <Form.Group controlId="fairSurveyCheckbox">
-                            <Form.Check
+                            <Label htmlFor="accept" className="flex">
+                                Denied
+                            </Label>
+                        </div>
+                        <div>
+                            <Checkbox
                                 type="checkbox"
-                                label="Fair Survey"
+
+                                id="fair-survey-checkbox"
                                 checked={fairSurvey}
                                 onChange={(e) => setFairSurvey(e.target.checked)}
                             />
-                        </Form.Group>
+                            <Label htmlFor="accept" className="flex">
+                                Fair
+                            </Label>
+                        </div>
+                    </div>
 
-                        <Button
-                            variant="primary"
-                            onClick={handleDownloadBasedOnSelection}
-                            disabled={loading}
-                        >
-                            Download Based on Selection
-                        </Button>
+                    {/* download button */}
+                    <div className="flex items-center justify-center">
+                        <div>
+                            <Button
+                                className={'m-3'}
+                                onClick={handleDownloadBasedOnSelection}
+                                disabled={!selectedDivision}
+                                isProcessing={loading}
+                            >
+                                Download
+                            </Button>
+                        </div>
+                        {/*  <div>
+                            {loading && (
+                                <div className="fs-6 fw-semibold">
+                                    downloading...
+                                    Downloaded {downloadCount} surveys
+                                </div>
+                            )}
+                        </div> */}
+                    </div>
 
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleCollectionDump("survey")}
-                            disabled={loading}
-                        >
-                            Dump Full Collection
-                        </Button>
+                </div>
+            </div>
 
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleSurveyDeniedDump("survey")}
-                            disabled={loading}
-                        >
-                            Dump Survey Denied Collection
-                        </Button>
 
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleRoomLockedDump("survey")}
-                            disabled={loading}
-                        >
-                            Dump Room Locked Collection
-                        </Button>
+            <Button.Group className="flex items-center justify-center">
+                <Button
+                    color="gray"
+                    onClick={() => dumpCollection("6650391e00030acc335b")}
+                >
+                    All
+                </Button>
 
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleFairSurveyDump("survey")}
-                            disabled={loading}
-                        >
-                            Dump Fair Survey Collection
-                        </Button>
+                <Button
+                    color="gray"
+                    onClick={() => dumpSurveyDeniedCollection("6650391e00030acc335b")}
+                >
+                    Denied
+                </Button>
 
-                        {loading && (
-                            <p>Downloading... {downloadCount} documents downloaded so far.</p>
-                        )}
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
-    );
+                <Button
+                    color="gray"
+                    onClick={() => dumpRoomLockedCollection("6650391e00030acc335b")}
+                >
+                    Locked
+                </Button>
+
+                <Button
+                    color="gray"
+                    onClick={() => dumpFairSurveyCollection("6650391e00030acc335b")}
+                >
+                    Fair
+                </Button>
+            </Button.Group>
+        </div>
+    )
+        ;
 };
 
 export default DownloadCollection;

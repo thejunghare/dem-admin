@@ -1,15 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './pages/Header';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import UploadVoter from './pages/UploadVoter';
-import JsonToExcel from './pages/JsonToExcel';
-import Attendance from './pages/Attendance';
 import JsonToExcelCallingData from './pages/JsonToExcelCallingData';
 import DownloadCollection from './pages/DownloadCollection';
-import DocumentCount from './pages/DocumentCount';
-import {account} from './lib/appwrite';
+import Client from './pages/Clients';
+import { account } from './lib/appwrite';
+import { ClientProvider } from './lib/context/ClientContext';
+import { Spinner } from "flowbite-react";
+
+const AuthenticatedRoute = ({ element, isAuthenticated }) => {
+      return isAuthenticated ? element : <Navigate to="/login" />;
+};
 
 const App = () => {
       const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,7 +26,6 @@ const App = () => {
                         await account.get();
                         setIsAuthenticated(true);
                   } catch (error) {
-                        console.error('Failed to authenticate:', error);
                         setIsAuthenticated(false);
                   } finally {
                         setLoading(false);
@@ -31,15 +35,7 @@ const App = () => {
             checkAuth();
       }, []);
 
-      const handleLogin = async (email, password) => {
-            try {
-                  await account.createEmailPasswordSession(email, password);
-                  setIsAuthenticated(true);
-            } catch (error) {
-                  console.error('Login failed:', error);
-                  setIsAuthenticated(false);
-            }
-      };
+      const handleLogin = () => setIsAuthenticated(true);
 
       const handleLogout = async () => {
             try {
@@ -51,54 +47,29 @@ const App = () => {
       };
 
       if (loading) {
-            return <div>Loading...</div>;
+            return (
+                  <div className="relative m-6 w-screen h-screen outline-dashed outline-1 outline-black">
+                        <div className="absolute w-[50px] h-[50px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <Spinner aria-label="Loading..." />
+                        </div>
+                  </div>
+            );
       }
 
       return (
-            <Router>
-                  {isAuthenticated && <Header onLogout={handleLogout}/>} {/* Pass onLogout handler to Header */}
-                  <Routes>
-                        {/* Public Route: Login */}
-                        <Route
-                              path="/login"
-                              element={isAuthenticated ? <Navigate to="/home"/> : <Login onLogin={handleLogin}/>}
-                        />
-
-                        {/* Private Routes */}
-                        <Route
-                              path="/"
-                              element={isAuthenticated ? <Navigate to="/home"/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/home"
-                              element={isAuthenticated ? <Home/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/attendance"
-                              element={isAuthenticated ? <Attendance/> : <Navigate to="/attendance"/>}
-                        />
-                        <Route
-                              path="/upload-voter"
-                              element={isAuthenticated ? <UploadVoter/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/json-to-excel"
-                              element={isAuthenticated ? <JsonToExcel/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/calling-json-to-excel"
-                              element={isAuthenticated ? <JsonToExcelCallingData/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/download-documents"
-                              element={isAuthenticated ? <DownloadCollection/> : <Navigate to="/login"/>}
-                        />
-                        <Route
-                              path="/count-emp-survey"
-                              element={isAuthenticated ? <DocumentCount/> : <Navigate to="/login"/>}
-                        />
-                  </Routes>
-            </Router>
+            <ClientProvider>
+                  <Router>
+                        {isAuthenticated && <Header onLogout={handleLogout} />}
+                        <Routes>
+                              <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />} />
+                              <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+                              <Route path="/home" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<Home />} />} />
+                              <Route path="/calling-json-to-excel" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<JsonToExcelCallingData />} />} />
+                              <Route path="/download-documents" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<DownloadCollection />} />} />
+                              <Route path="/clients" element={<AuthenticatedRoute isAuthenticated={isAuthenticated} element={<Client />} />} />
+                        </Routes>
+                  </Router>
+            </ClientProvider>
       );
 };
 
