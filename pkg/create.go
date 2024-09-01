@@ -7,10 +7,9 @@ import (
 	"os"
 
 	"github.com/appwrite/sdk-for-go/databases"
-	"github.com/appwrite/sdk-for-go/id"
 )
 
-func Create(appwrite_database *databases.Databases, database_id, collection_id, json_file_path string) {
+func CreateDocs(appwrite_database *databases.Databases, database_id, collection_id, json_file_path string) {
 	fmt.Println("Running create document API!")
 
 	// Read the JSON file
@@ -32,7 +31,25 @@ func Create(appwrite_database *databases.Databases, database_id, collection_id, 
 	}
 
 	for i, item := range data {
-		response, err := appwrite_database.CreateDocument(database_id, collection_id, id.Unique(), item)
+		// Extract the $id from the item
+		docID, ok := item["$id"].(string)
+		if !ok || docID == "" {
+			fmt.Printf("Error: $id is missing or not a string in document %d\n", i+1)
+			continue
+		}
+
+		// Remove $id from the item map if it's not needed as a field in the document
+		delete(item, "$id")
+		delete(item, "$collectionId")
+		delete(item, "$databaseId")
+		delete(item, "$databaseId")
+		delete(item, "last_update_date")
+		delete(item, "updateat")
+		delete(item, "last_updated_date")
+		delete(item, "nameSource")
+
+		// Create the document with the provided $id
+		response, err := appwrite_database.CreateDocument(database_id, collection_id, docID, item)
 		if err != nil {
 			fmt.Printf("Error creating document %d: %s\n", i+1, err)
 			continue
