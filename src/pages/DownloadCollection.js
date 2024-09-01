@@ -8,7 +8,8 @@ import {
     Select,
     TextInput,
 } from "flowbite-react";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const appwrite = new Client();
 appwrite
@@ -253,6 +254,8 @@ const DownloadCollection = () => {
         setBuildings(area ? area.buildings : []);
     };
 
+    const downloadcomplete = () => toast("Downloaded!");
+
     const handleDownloadBasedOnSelection = async () => {
         const filters = {};
         if (selectedDivision) filters.division = selectedDivision;
@@ -329,6 +332,7 @@ const DownloadCollection = () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            downloadcomplete()
         } catch (error) {
             console.error(`Failed to dump collection: ${error.message}`);
         } finally {
@@ -340,6 +344,7 @@ const DownloadCollection = () => {
     return (
         <div>
             <div>
+                <ToastContainer />
                 <div className="mt-2">
                     {/* select division && select ward*/}
                     <div className={'my-3 flex flex-row items-center justify-evenly'}>
@@ -475,19 +480,20 @@ const DownloadCollection = () => {
                             <Button
                                 className={'m-3'}
                                 onClick={handleDownloadBasedOnSelection}
-                                disabled={!selectedDivision || loading}
+                                disabled={!selectedDivision}
+                                isProcessing={loading}
                             >
                                 Download
                             </Button>
                         </div>
-                        <div>
+                        {/*  <div>
                             {loading && (
                                 <div className="fs-6 fw-semibold">
                                     downloading...
                                     Downloaded {downloadCount} surveys
                                 </div>
                             )}
-                        </div>
+                        </div> */}
                     </div>
 
                 </div>
