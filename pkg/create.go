@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/appwrite/sdk-for-go/databases"
 )
 
 func CreateDocs(appwrite_database *databases.Databases, database_id, collection_id, json_file_path string) {
+	startTime := time.Now()
 	fmt.Println("Running create document API!")
 
 	// Read the JSON file
@@ -57,5 +59,6 @@ func CreateDocs(appwrite_database *databases.Databases, database_id, collection_
 		fmt.Printf("Document %d created successfully: ID = %s\n", i+1, response.Id)
 	}
 
-	fmt.Println("All documents created successfully.")
+	elapsedTime := time.Since(startTime)
+	fmt.Printf("completed in %s.\n", elapsedTime)
 }
