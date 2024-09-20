@@ -28,7 +28,7 @@ func main() {
 
 	database_id := os.Getenv("DATABASE_ID")
 	collection_id := os.Getenv("TEST_ID") //test collection
-	json_file_path = "./khopoli_all.json"
+	//json_file_path = "./khopoli_all.json"
 
 	appwrite_client = appwrite.NewClient(
 		appwrite.WithProject(appwrite_project_id),

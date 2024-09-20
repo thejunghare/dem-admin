@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { account } from '../lib/appwrite';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { account } from "../lib/appwrite";
+import { useNavigate } from "react-router-dom";
 import { Spinner, Badge, Button } from "flowbite-react";
 import { FiLogOut } from "react-icons/fi";
 
@@ -24,17 +24,19 @@ const Home = () => {
 
   const logout = async () => {
     setDisable(true);
-    await account.deleteSession('current');
-    navigate('/login');
+    await account.deleteSession("current");
+    navigate("/login");
   };
 
   return (
-    <div className='m-3'>
+    <div className="m-3">
       {user ? (
-        <div className='flex flex-row items-center justify-between'>
-          <div className='flex flex-row items-center justify-start'>
-            <h1 className='text-base font-semibold'>Welcome, {user.name}</h1>
-            <Badge color="failure" className='ml-2'>{user.labels}</Badge>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-start">
+            <h1 className="text-base font-semibold">Welcome, {user.name}</h1>
+            <Badge color="failure" className="ml-2">
+              {user.labels}
+            </Badge>
           </div>
           <div>
             <Button
