@@ -293,7 +293,7 @@ const DownloadCollection = () => {
             setDownloadCount(0);
 
             const databaseId = "66502c6e0015d7be8526";
-            const collectionId = "6650391e00030acc335b";
+            const collectionId = "8";
             let documents = [];
             let response;
             let lastDocumentId = null;

@@ -2,11 +2,13 @@ package pkg
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/appwrite/sdk-for-go/databases"
 )
 
-func Delete(appwrite_database *databases.Databases, database_id, collection_id string) {
+func DeleteDocs(appwrite_database *databases.Databases, database_id, collection_id string) {
+	startTime := time.Now()
 	fmt.Println("Running delete document API!")
 
 	response, err := appwrite_database.ListDocuments(database_id, collection_id)
@@ -25,5 +27,6 @@ func Delete(appwrite_database *databases.Databases, database_id, collection_id s
 		fmt.Printf("Document %d deleted successfully.\n", i+1)
 	}
 
-	fmt.Println("Document deleted successfully.")
+	elapsedTime := time.Since(startTime)
+	fmt.Printf("All documents created successfully in %s.\n", elapsedTime)
 }
